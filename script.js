@@ -286,32 +286,12 @@ function renderTeamMembers(people) {
 }
 
 // Load and display team members
-async function loadTeamMembers() {
+function loadTeamMembers() {
     const container = document.getElementById('team-container');
     if (!container) return;
     
-    try {
-        const response = await fetch('backend/people.csv');
-        if (!response.ok) {
-            throw new Error('Failed to load people.csv');
-        }
-        
-        const csvText = await response.text();
-        const people = parseCSV(csvText);
-        
-        if (people.length > 0) {
-            renderTeamMembers(people);
-        } else {
-            // CSV was empty, use fallback
-            console.log('CSV empty, using fallback data');
-            renderTeamMembers(fallbackTeamData);
-        }
-        
-    } catch (error) {
-        // Fetch failed (likely due to CORS/file:// protocol), use fallback data
-        console.log('Could not fetch CSV, using fallback data:', error.message);
-        renderTeamMembers(fallbackTeamData);
-    }
+    // Use the embedded team data directly
+    renderTeamMembers(fallbackTeamData);
 }
 
 // ===== PUBLICATIONS PAGE DYNAMIC LOADING =====
@@ -444,28 +424,10 @@ function renderPublications(publications) {
 }
 
 // Load and display publications
-async function loadPublications() {
+function loadPublications() {
     const container = document.getElementById('publications-container');
     if (!container) return;
     
-    try {
-        const response = await fetch('backend/citations.csv');
-        if (!response.ok) {
-            throw new Error('Failed to load citations.csv');
-        }
-        
-        const csvText = await response.text();
-        const publications = parseCSV(csvText);
-        
-        if (publications.length > 0) {
-            renderPublications(publications);
-        } else {
-            console.log('CSV empty, using fallback data');
-            renderPublications(fallbackPublicationsData);
-        }
-        
-    } catch (error) {
-        console.log('Could not fetch CSV, using fallback data:', error.message);
-        renderPublications(fallbackPublicationsData);
-    }
+    // Use the embedded publications data directly
+    renderPublications(fallbackPublicationsData);
 }
