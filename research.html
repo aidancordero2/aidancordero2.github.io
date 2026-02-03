@@ -6,7 +6,7 @@
     <title>Research | Kinney Lab</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="research.css">
 </head>
@@ -28,7 +28,7 @@
         <section class="page-hero">
             <div class="container">
                 <h1>Research</h1>
-                <p>...</p>
+                <p>Sequence-function relationships, machine learning, and the biophysics of gene regulation</p>
             </div>
         </section>
 
@@ -36,7 +36,7 @@
             <div class="container">
                 <div class="overview-content">
                     <h2>Our Mission</h2>
-                    <p>The Justin Kinney Lab... </p>
+                    <p>We study the biophysical mechanisms of gene regulation by quantitatively measuring and modeling sequence-function relationships. Our research combines mathematical theory, machine learning, and experiments to advance fundamental understanding of biology and biophysics, while accelerating the discovery of new treatments for cancer and other diseases.</p>
                 </div>
             </div>
         </section>
@@ -49,25 +49,37 @@
                 </div>
                 
                 <div class="research-area-card">
-                    <div class="area-number">01</div>
                     <div class="area-content">
-                        <h3>Genomic Analysis</h3>
-                        <p>We develop algorithms and software tools to process and interpret large-scale genomic datasets.</p>
-                        <div class="area-tags">
-                        </div>
+                        <h3>Massively Parallel Reporter Assays</h3>
+                        <p>Our experimental work uses massively parallel reporter assays (MPRAs) to measure the effects that variant gene regulatory sequences have on gene expression. Dr. Kinney co-invented this widely-used technique as a graduate student. We pursue MPRA experiments in two biological contexts: alternative mRNA splicing in human cells and transcriptional regulation in bacteria.</p>
                     </div>
                 </div>
 
                 <div class="research-area-card">
-                    <div class="area-number">02</div>
                     <div class="area-content">
-                        <h3>Predictive Modeling</h3>
-                        <p</p>
-                        <div class="area-tags">
-                            <span class="tag">Machine Learning</span>
-                            <span class="tag">Statistical Genetics</span>
-                            <span class="tag">Deep Learning</span>
-                        </div>
+                        <h3>Alternative mRNA Splicing</h3>
+                        <p>We study the quantitative mechanisms of alternative mRNA splicing in human cells, including the readout of pre-mRNA sequence by snRNPs and RNA-binding proteins. This work has direct clinical relevance to understanding and treating diseases like Spinal Muscular Atrophy and cancer, and informs the development of splice-modifying RNA therapeutics.</p>
+                    </div>
+                </div>
+
+                <div class="research-area-card">
+                    <div class="area-content">
+                        <h3>Machine Learning for Genomics</h3>
+                        <p>We develop methods for analyzing data from MPRAs and other multiplex assays of variant effect (MAVEs). A key focus is bridging the divide between "black-box" deep neural network models in genomics and mechanistically interpretable biophysical models of gene regulation. We use surrogate models and interpretable neural networks to extract meaningful biological insights.</p>
+                    </div>
+                </div>
+
+                <div class="research-area-card">
+                    <div class="area-content">
+                        <h3>Quantitative Sequence-Function Relationships</h3>
+                        <p>Our theoretical work develops rigorous mathematical frameworks for understanding quantitative sequence-function relationships. This includes applying concepts from information theory, statistical physics, and gauge theory to extract biophysically meaningful models from experimental data and to address fundamental questions about the interpretability and identifiability of such models.</p>
+                    </div>
+                </div>
+
+                <div class="research-area-card">
+                    <div class="area-content">
+                        <h3>Bacterial Transcriptional Regulation</h3>
+                        <p>We study the biophysics of transcriptional regulation in bacteria, using precision measurements to characterize cis-regulatory energetics in living cells. This work provides insights into the fundamental mechanisms by which gene regulatory sequences control gene expression and serves as a model system for developing quantitative approaches.</p>
                     </div>
                 </div>
             </div>
@@ -76,19 +88,24 @@
         <section class="tools-resources">
             <div class="container">
                 <div class="section-header">
-                    <h2>Tools & Resources</h2>
+                    <h2>Software & Tools</h2>
                     <div class="header-line"></div>
                 </div>
                 <div class="tools-grid">
                     <div class="tool-card">
-                        <h3>Software</h3>
-                        <p>Open-source tools and packages developed by our lab will be available here.</p>
+                        <h3>MAVE-NN</h3>
+                        <p>A Python package for learning genotype-phenotype maps from multiplex assays of variant effect. MAVE-NN uses neural networks to model complex sequence-function relationships from MPRA and other high-throughput data.</p>
+                        <a href="https://github.com/jbkinney/mavenn" class="tool-link" target="_blank">GitHub Repository</a>
                     </div>
                     <div class="tool-card">
-                        <h3>Datasets</h3>
+                        <h3>Logomaker</h3>
+                        <p>A Python package for creating publication-quality sequence logos. Logomaker provides flexible and customizable visualizations for DNA, RNA, and protein sequence motifs.</p>
+                        <a href="https://github.com/jbkinney/logomaker" class="tool-link" target="_blank">GitHub Repository</a>
                     </div>
                     <div class="tool-card">
-                        <h3>Protocols</h3>
+                        <h3>GaugeFixer</h3>
+                        <p>Software for overcoming parameter non-identifiability in models of sequence-function relationships. GaugeFixer addresses gauge freedoms that arise in biophysical models of gene regulation.</p>
+                        <a href="https://github.com/jbkinney/gaugefixer" class="tool-link" target="_blank">GitHub Repository</a>
                     </div>
                 </div>
             </div>

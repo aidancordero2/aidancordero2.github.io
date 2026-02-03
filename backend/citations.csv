@@ -1,0 +1,22 @@
+Authors,Title,Publication,Volume,Number,Pages,Year,Publisher,Paper,PDF,Code
+"Kinney, Justin B; Tkačik, Gašper; Callan, Curtis G",Precise physical models of protein–DNA interaction from high-throughput data,Proceedings of the National Academy of Sciences USA,104,2,501-506,2007,National Acad Sciences,,,
+"Kinney, Justin B; Murugan, Anand; Callan, Curtis G; Cox, Edward C",Using deep sequencing to characterize the biophysical mechanism of a transcriptional regulatory sequence,Proceedings of the National Academy of Sciences USA,107,20,9158-9163,2010,National Acad Sciences,,,
+"Kinney, Justin B",Estimation of probability densities using scale-free field theories,Physical Review E,90,,011301(R),2014,American Physical Society,,,
+"Kinney, Justin B; Atwal, Gurinder S",Parametric inference in the large data limit using maximally informative models,Neural Computation,26,4,637-665,2014,MIT Press,,,
+"Kinney, Justin B; Atwal, Gurinder S","Equitability, mutual information, and the maximal information coefficient",Proceedings of the National Academy of Sciences USA,111,9,3354-3359,2014,,,,
+"Atwal, Gurinder S; Kinney, Justin B",Learning quantitative sequence–function relationships from massively parallel experiments,Journal of Statistical Physics,,,1-41,2015,Springer,,,
+"Kinney, Justin B",Unification of field theory and maximum entropy methods for learning probability densities,Physical Review E,92,,032107,2015,American Physical Society,,,
+"Adams, Rhys M; Mora, Thierry; Walczak, Aleksandra M; Kinney, Justin B",Measuring the sequence-affinity landscape of antibodies with massively parallel titration curves,eLife,5,,e23156,2016,eLife Sciences Publications Ltd,,,
+"Chen, Wei-Chia; Tareen, Ammar; Kinney, Justin B",Density estimation on small data sets,Physical Review Letters,121,16,160605,2018,American Physical Society,,,
+"Wong, Mandy S; Kinney, Justin B; Krainer, Adrian R",Quantitative Activity Profile and Context Dependence of All Human 5′ Splice Sites,Molecular Cell,71,6,1012-1026.e3,2018,Cell Press,,,
+"Forcier, Talitha L; Ayaz, Andalus; Gill, Manraj S; Jones, Daniel; Phillips, Rob; Kinney, Justin B",Measuring cis-regulatory energetics in living cells using allelic manifolds,eLife,7,,e40618,2018,eLife Sciences Publications Ltd,,,
+"Tareen, Ammar; Kinney, Justin B",Logomaker: beautiful sequence logos in Python,Bioinformatics,36,7,2272-2274,2020,Oxford University Press,,,https://github.com/jbkinney/logomaker
+"Kinney, Justin B; McCandlish, David M",Massively parallel assays and quantitative sequence–function relationships,Annual Review of Genomics and Human Genetics,20,1,99-127,2019,Annual Reviews,,,
+"Tareen, Ammar; Kinney, Justin B",Biophysical models of cis-regulation as interpretable neural networks,arXiv preprint arXiv:2001.03560,,,,2019,,,,
+"Tareen, Ammar; Kooshkbaghi, Mahdi; Posfai, Anna; Ireland, William T; McCandlish, David M; Kinney, Justin B",MAVE-NN: learning genotype-phenotype maps from multiplex assays of variant effect,Genome Biology,23,1,98,2022,BioMed Central London,,,https://github.com/jbkinney/mavenn
+"Seitz, Evan E; McCandlish, David M; Kinney, Justin B; Koo, Peter K",Interpreting cis-regulatory mechanisms from genomic deep neural networks using surrogate models,Nature Machine Intelligence,6,6,701-713,2024,Nature Publishing Group UK London,,,
+"Posfai, Anna; Zhou, Juannan; McCandlish, David M; Kinney, Justin B",Gauge fixing for sequence-function relationships,PLoS Computational Biology,21,3,e1012818,2025,Public Library of Science San Francisco CA USA,,,
+"Posfai, Anna; McCandlish, David M; Kinney, Justin B","Symmetry, gauge freedoms, and the interpretability of sequence-function relationships",Physical Review Research,7,2,023005,2025,American Physical Society,,,
+"Rousseau, Rebecca J; Kinney, Justin B",Algebraic and Diagrammatic Methods for the Rule-Based Modeling of Multiparticle Complexes,PRX Life,3,2,023004,2025,American Physical Society,,,
+"Seitz, Evan E; McCandlish, David M; Kinney, Justin B; Koo, Peter K",Uncovering the mechanistic landscape of regulatory DNA with deep learning,bioRxiv,,,2025.10.07.681052,2025,Cold Spring Harbor Laboratory,,,
+"Martí-Gómez, Carlos; McCandlish, David M; Kinney, Justin B",GaugeFixer: overcoming parameter non-identifiability in models of sequence-function relationships,bioRxiv,,,2025.12.08.693054,2025,Cold Spring Harbor Laboratory,,,https://github.com/jbkinney/gaugefixer

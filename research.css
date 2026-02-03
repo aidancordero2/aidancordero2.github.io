@@ -1,167 +1,120 @@
 .research-overview {
-    background: var(--bg-light);
-    padding: 5rem 0;
+    background: var(--bg-white);
+    padding: 3rem 0;
 }
 
 .overview-content {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
+    max-width: 850px;
 }
 
 .overview-content h2 {
-    font-family: 'Crimson Pro', serif;
-    font-size: 2.5rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.75rem;
     font-weight: 600;
     color: var(--text-dark);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .overview-content p {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     line-height: 1.8;
     color: var(--text-medium);
 }
 
 .research-areas-detail {
-    padding: 5rem 0;
+    padding: 3rem 0;
+    background: var(--bg-white);
 }
 
 .research-area-card {
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 2rem;
-    margin-bottom: 3rem;
-    padding: 2.5rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px var(--shadow);
-    transition: all 0.4s ease;
-}
-
-.research-area-card:hover {
-    transform: translateX(12px);
-    box-shadow: 0 8px 30px var(--shadow-hover);
-}
-
-.area-number {
-    font-family: 'Crimson Pro', serif;
-    font-size: 4rem;
-    font-weight: 300;
-    color: var(--accent);
-    opacity: 0.3;
-    line-height: 1;
+    margin-bottom: 2rem;
 }
 
 .area-content h3 {
-    font-family: 'Crimson Pro', serif;
-    font-size: 2rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.25rem;
     font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 1rem;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
 }
 
 .area-content p {
     color: var(--text-medium);
     line-height: 1.8;
-    margin-bottom: 1.5rem;
-    font-size: 1.0625rem;
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
 }
 
 .area-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.5rem;
 }
 
 .tag {
-    background: var(--bg-light);
-    color: var(--primary);
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    border: 1px solid var(--border);
-    transition: all 0.3s ease;
-}
-
-.tag:hover {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
-
-.publications {
-    background: var(--bg-light);
-    padding: 5rem 0;
-}
-
-.publications-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.empty-state {
-    text-align: center;
+    background: transparent;
     color: var(--text-light);
-    font-size: 1.125rem;
-    padding: 3rem;
-    background: white;
-    border-radius: 12px;
-    border: 2px dashed var(--border);
+    padding: 0.2rem 0;
+    font-size: 0.85rem;
+    font-weight: 400;
 }
 
 .tools-resources {
-    padding: 5rem 0;
+    padding: 3rem 0;
+    background: var(--bg-white);
 }
 
 .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 .tool-card {
-    padding: 2.5rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px var(--shadow);
-    border-top: 4px solid var(--accent);
-    transition: all 0.4s ease;
-}
-
-.tool-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 30px var(--shadow-hover);
-    border-top-color: var(--primary);
+    padding: 0;
+    margin-bottom: 1.5rem;
 }
 
 .tool-card h3 {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.75rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.15rem;
     font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 1rem;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
 }
 
 .tool-card p {
     color: var(--text-medium);
     line-height: 1.7;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.tool-link {
+    display: inline-block;
+    color: var(--accent);
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.tool-link:hover {
+    text-decoration: underline;
 }
 
 @media (max-width: 768px) {
     .research-area-card {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 0.75rem;
     }
     
     .area-number {
-        font-size: 3rem;
+        font-size: 2rem;
     }
     
     .area-content h3 {
-        font-size: 1.5rem;
+        font-size: 1.15rem;
     }
     
     .tools-grid {

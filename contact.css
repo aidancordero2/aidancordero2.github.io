@@ -1,118 +1,121 @@
 .contact-section {
-    padding: 5rem 0;
+    padding: 3rem 0;
+    background: var(--bg-white);
 }
 
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    gap: 3rem;
 }
 
 .contact-info h2,
 .opportunities h2 {
-    font-family: 'Crimson Pro', serif;
-    font-size: 2.25rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 1.5rem;
-}
-
-.contact-intro {
-    font-size: 1.125rem;
-    color: var(--text-medium);
-    line-height: 1.8;
-    margin-bottom: 2.5rem;
-}
-
-.info-items {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.info-item {
-    display: flex;
-    gap: 1.5rem;
-    align-items: flex-start;
-}
-
-.info-icon {
-    font-size: 2rem;
-    flex-shrink: 0;
-}
-
-.info-content h3 {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 0.5rem;
-}
-
-.info-content p {
-    color: var(--text-medium);
-    line-height: 1.7;
-}
-
-.opportunity-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px var(--shadow);
-    margin-bottom: 1.5rem;
-    border-left: 4px solid var(--accent);
-    transition: all 0.3s ease;
-}
-
-.opportunity-card:hover {
-    transform: translateX(8px);
-    box-shadow: 0 6px 25px var(--shadow-hover);
-    border-left-color: var(--primary);
-}
-
-.opportunity-card h3 {
-    font-family: 'Crimson Pro', serif;
+    font-family: 'Crimson Pro', Georgia, serif;
     font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 0.75rem;
-}
-
-.opportunity-card p {
-    color: var(--text-medium);
-    line-height: 1.7;
-}
-
-.map-placeholder {
-    background: var(--bg-light);
-    padding: 5rem 0;
-}
-
-.map-card {
-    background: white;
-    padding: 4rem;
-    border-radius: 12px;
-    text-align: center;
-    border: 2px dashed var(--border);
-}
-
-.map-card h3 {
-    font-family: 'Crimson Pro', serif;
-    font-size: 1.75rem;
     font-weight: 600;
     color: var(--text-dark);
     margin-bottom: 1rem;
 }
 
+.contact-intro {
+    font-size: 1.1rem;
+    color: var(--text-medium);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.info-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.info-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 0.75rem 0;
+}
+
+.info-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.info-content h3 {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+}
+
+.info-content p {
+    color: var(--text-medium);
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+.info-content a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.info-content a:hover {
+    text-decoration: underline;
+}
+
+.opportunity-card {
+    padding: 0.75rem 0;
+    margin-bottom: 0.5rem;
+}
+
+.opportunity-card h3 {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.opportunity-card p {
+    color: var(--text-medium);
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+.map-placeholder {
+    background: var(--bg-light);
+    padding: 3rem 0;
+    border-top: 1px solid var(--border);
+}
+
+.map-card {
+    background: var(--bg-white);
+    padding: 3rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px dashed var(--border);
+}
+
+.map-card h3 {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+}
+
 .map-card p {
     color: var(--text-light);
-    font-size: 1.125rem;
+    font-size: 1rem;
 }
 
 @media (max-width: 968px) {
     .contact-grid {
         grid-template-columns: 1fr;
-        gap: 3rem;
+        gap: 2rem;
     }
 }
 
@@ -120,5 +123,10 @@
     .info-item {
         flex-direction: column;
         gap: 0.75rem;
+    }
+    
+    .contact-info h2,
+    .opportunities h2 {
+        font-size: 1.35rem;
     }
 }
