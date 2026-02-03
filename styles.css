@@ -110,7 +110,7 @@ body {
 
 /* Hero Section */
 .hero {
-    padding: 3rem 0;
+    padding: 6rem 0 3rem 0;
     background: var(--bg-white);
 }
 
