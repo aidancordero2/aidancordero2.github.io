@@ -19,7 +19,7 @@
 }
 
 .contact-intro {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: var(--text-medium);
     line-height: 1.8;
     margin-bottom: 1.5rem;
@@ -53,8 +53,8 @@
 
 .info-content p {
     color: var(--text-medium);
-    line-height: 1.7;
-    font-size: 1rem;
+    line-height: 1.8;
+    font-size: 1.1rem;
 }
 
 .info-content a {
@@ -81,8 +81,8 @@
 
 .opportunity-card p {
     color: var(--text-medium);
-    line-height: 1.7;
-    font-size: 1rem;
+    line-height: 1.8;
+    font-size: 1.1rem;
 }
 
 .map-placeholder {

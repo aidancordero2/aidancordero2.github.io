@@ -16,7 +16,7 @@
 }
 
 .overview-content p {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     line-height: 1.8;
     color: var(--text-medium);
 }
@@ -42,7 +42,7 @@
     color: var(--text-medium);
     line-height: 1.8;
     margin-bottom: 1rem;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
 }
 
 .area-tags {
@@ -86,8 +86,8 @@
 
 .tool-card p {
     color: var(--text-medium);
-    line-height: 1.7;
-    font-size: 1rem;
+    line-height: 1.8;
+    font-size: 1.1rem;
     margin-bottom: 1rem;
 }
 

@@ -23,7 +23,7 @@ body {
     color: var(--text-dark);
     background: var(--bg-white);
     line-height: 1.8;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
 }
 
 .container {
@@ -158,7 +158,7 @@ body {
 }
 
 .hero-description {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     line-height: 1.8;
     color: var(--text-medium);
     margin-bottom: 1rem;
@@ -257,8 +257,8 @@ section {
 
 .research-item p {
     color: var(--text-medium);
-    line-height: 1.7;
-    font-size: 1.05rem;
+    line-height: 1.8;
+    font-size: 1.1rem;
 }
 
 .link-arrow {
@@ -303,8 +303,8 @@ section {
 
 .news-item p {
     color: var(--text-medium);
-    line-height: 1.7;
-    font-size: 1.05rem;
+    line-height: 1.8;
+    font-size: 1.1rem;
 }
 
 /* Page Hero (for subpages) */

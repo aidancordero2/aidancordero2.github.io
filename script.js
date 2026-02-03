@@ -283,14 +283,6 @@ function renderTeamMembers(people) {
     
     container.innerHTML = html;
     
-    // Re-apply animations to new elements
-    const newElements = container.querySelectorAll('.team-member');
-    newElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
 }
 
 // Load and display team members
@@ -449,15 +441,6 @@ function renderPublications(publications) {
     });
     
     container.innerHTML = html;
-    
-    // Re-apply animations
-    const newElements = container.querySelectorAll('.pub-item');
-    newElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
 }
 
 // Load and display publications
