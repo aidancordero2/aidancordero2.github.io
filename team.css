@@ -58,6 +58,21 @@
     outline-color: #000000;
 }
 
+.member-photo-link {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.member-photo-link .member-photo {
+    transition: transform 0.2s ease;
+}
+
+.member-photo-link:hover .member-photo {
+    transform: scale(1.05);
+    outline-color: #000000;
+}
+
 .member-photo img {
     width: 100%;
     height: 100%;

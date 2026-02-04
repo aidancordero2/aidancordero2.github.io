@@ -115,71 +115,56 @@ body {
     background: var(--bg-white);
 }
 
-.hero-layout {
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 3rem;
-    align-items: start;
-}
-
-.hero-content {
-    max-width: 750px;
-}
-
-.hero-photo {
+.hero-centered {
     text-align: center;
+    max-width: 1000px;
+    margin: 0 auto 3rem;
 }
 
-.hero-photo img {
+.hero-logo {
+    margin-bottom: 1.5rem;
+}
+
+.hero-logo img {
+    max-width: 350px;
     width: 100%;
-    max-width: 240px;
     height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px var(--shadow);
-}
-
-.photo-caption {
-    margin-top: 0.4rem;
-    font-size: 0.9rem;
-    color: var(--text-medium);
-    line-height: 1.4;
-}
-
-.photo-caption:first-of-type {
-    margin-top: 1rem;
-}
-
-.lab-name {
-    font-family: 'Crimson Pro', Georgia, serif;
-    font-size: 2.75rem;
-    font-weight: 600;
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
-    color: #000000;
-}
-
-.hero-description {
-    font-size: 1.15rem;
-    line-height: 1.8;
-    color: var(--text-medium);
-    margin-bottom: 1rem;
-}
-
-.hero-description:last-of-type {
-    margin-bottom: 1.5rem;
 }
 
 .hero-tagline {
     font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
+    line-height: 1.7;
     color: var(--text-medium);
+    margin-bottom: 1.5rem;
+    white-space: nowrap;
 }
 
 .hero-cta {
     display: flex;
     gap: 1rem;
-    margin-top: 1.5rem;
+    justify-content: center;
+}
+
+.hero-about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-column h3 {
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 0.75rem;
+}
+
+.about-column p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-medium);
 }
 
 .btn {
@@ -309,6 +294,21 @@ section {
     font-size: 1.1rem;
 }
 
+/* Site Address */
+.site-address {
+    padding: 2rem 0 3rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+}
+
+.site-address p {
+    color: var(--text-medium);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0.25rem 0;
+}
+
 /* Page Hero (for subpages) */
 .page-hero {
     margin-top: 60px;
@@ -398,34 +398,23 @@ section {
         margin-top: 100px;
     }
     
-    .hero-layout {
+    .hero-logo img {
+        max-width: 280px;
+    }
+    
+    .hero-tagline {
+        font-size: 1rem;
+        white-space: normal;
+    }
+    
+    .hero-about {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
     
-    .hero-photo {
-        order: -1;
-    }
-    
-    .hero-photo img {
-        max-width: 180px;
-    }
-    
-    .lab-name {
-        font-size: 2rem;
-        text-align: center;
-    }
-    
-    .hero-content {
-        text-align: center;
-    }
-    
-    .hero-description {
-        text-align: left;
-    }
-    
     .hero-cta {
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
     }
     
     .section-header h2 {
@@ -455,7 +444,15 @@ section {
         padding: 2rem 0;
     }
     
-    .lab-name {
-        font-size: 1.75rem;
+    .hero-logo img {
+        max-width: 220px;
+    }
+    
+    .hero-tagline {
+        font-size: 1rem;
+    }
+    
+    .about-column h3 {
+        font-size: 1.2rem;
     }
 }
