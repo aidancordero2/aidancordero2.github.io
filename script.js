@@ -286,48 +286,105 @@ function renderTeamMembers(people) {
 }
 
 // Load and display team members
-function loadTeamMembers() {
+async function loadTeamMembers() {
     const container = document.getElementById('team-container');
     if (!container) return;
     
-    // Use the embedded team data directly
+    // Try to fetch from CSV first (works on deployed site)
+    try {
+        const response = await fetch('backend/people.csv');
+        if (!response.ok) {
+            throw new Error('Failed to load CSV');
+        }
+        
+        const csvText = await response.text();
+        const people = parseCSV(csvText);
+        
+        if (people.length > 0) {
+            renderTeamMembers(people);
+            return;
+        }
+    } catch (error) {
+        // Fetch failed (likely local file:// access), use fallback
+        console.log('Using embedded team data');
+    }
+    
+    // Fall back to embedded data
     renderTeamMembers(fallbackTeamData);
 }
 
 // ===== PUBLICATIONS PAGE DYNAMIC LOADING =====
 
-// Fallback publications data (used when CSV can't be loaded)
-// UPDATE THIS when you update citations.csv to keep them in sync
+// Fallback publications data (from scholar_publications.csv)
 const fallbackPublicationsData = [
-    { Authors: "Martí-Gómez, Carlos; McCandlish, David M; Kinney, Justin B", Title: "GaugeFixer: overcoming parameter non-identifiability in models of sequence-function relationships", Publication: "bioRxiv", Volume: "", Number: "", Pages: "2025.12.08.693054", Year: "2025", Paper: "", PDF: "", Code: "https://github.com/jbkinney/gaugefixer" },
-    { Authors: "Seitz, Evan E; McCandlish, David M; Kinney, Justin B; Koo, Peter K", Title: "Uncovering the mechanistic landscape of regulatory DNA with deep learning", Publication: "bioRxiv", Volume: "", Number: "", Pages: "2025.10.07.681052", Year: "2025", Paper: "", PDF: "", Code: "" },
-    { Authors: "Rousseau, Rebecca J; Kinney, Justin B", Title: "Algebraic and Diagrammatic Methods for the Rule-Based Modeling of Multiparticle Complexes", Publication: "PRX Life", Volume: "3", Number: "2", Pages: "023004", Year: "2025", Paper: "", PDF: "", Code: "" },
-    { Authors: "Posfai, Anna; McCandlish, David M; Kinney, Justin B", Title: "Symmetry, gauge freedoms, and the interpretability of sequence-function relationships", Publication: "Physical Review Research", Volume: "7", Number: "2", Pages: "023005", Year: "2025", Paper: "", PDF: "", Code: "" },
-    { Authors: "Posfai, Anna; Zhou, Juannan; McCandlish, David M; Kinney, Justin B", Title: "Gauge fixing for sequence-function relationships", Publication: "PLoS Computational Biology", Volume: "21", Number: "3", Pages: "e1012818", Year: "2025", Paper: "", PDF: "", Code: "" },
-    { Authors: "Seitz, Evan E; McCandlish, David M; Kinney, Justin B; Koo, Peter K", Title: "Interpreting cis-regulatory mechanisms from genomic deep neural networks using surrogate models", Publication: "Nature Machine Intelligence", Volume: "6", Number: "6", Pages: "701-713", Year: "2024", Paper: "", PDF: "", Code: "" },
-    { Authors: "Tareen, Ammar; Kooshkbaghi, Mahdi; Posfai, Anna; Ireland, William T; McCandlish, David M; Kinney, Justin B", Title: "MAVE-NN: learning genotype-phenotype maps from multiplex assays of variant effect", Publication: "Genome Biology", Volume: "23", Number: "1", Pages: "98", Year: "2022", Paper: "", PDF: "", Code: "https://github.com/jbkinney/mavenn" },
-    { Authors: "Tareen, Ammar; Kinney, Justin B", Title: "Logomaker: beautiful sequence logos in Python", Publication: "Bioinformatics", Volume: "36", Number: "7", Pages: "2272-2274", Year: "2020", Paper: "", PDF: "", Code: "https://github.com/jbkinney/logomaker" },
-    { Authors: "Kinney, Justin B; McCandlish, David M", Title: "Massively parallel assays and quantitative sequence–function relationships", Publication: "Annual Review of Genomics and Human Genetics", Volume: "20", Number: "1", Pages: "99-127", Year: "2019", Paper: "", PDF: "", Code: "" },
-    { Authors: "Tareen, Ammar; Kinney, Justin B", Title: "Biophysical models of cis-regulation as interpretable neural networks", Publication: "arXiv preprint arXiv:2001.03560", Volume: "", Number: "", Pages: "", Year: "2019", Paper: "", PDF: "", Code: "" },
-    { Authors: "Chen, Wei-Chia; Tareen, Ammar; Kinney, Justin B", Title: "Density estimation on small data sets", Publication: "Physical Review Letters", Volume: "121", Number: "16", Pages: "160605", Year: "2018", Paper: "", PDF: "", Code: "" },
-    { Authors: "Wong, Mandy S; Kinney, Justin B; Krainer, Adrian R", Title: "Quantitative Activity Profile and Context Dependence of All Human 5′ Splice Sites", Publication: "Molecular Cell", Volume: "71", Number: "6", Pages: "1012-1026.e3", Year: "2018", Paper: "", PDF: "", Code: "" },
-    { Authors: "Forcier, Talitha L; Ayaz, Andalus; Gill, Manraj S; Jones, Daniel; Phillips, Rob; Kinney, Justin B", Title: "Measuring cis-regulatory energetics in living cells using allelic manifolds", Publication: "eLife", Volume: "7", Number: "", Pages: "e40618", Year: "2018", Paper: "", PDF: "", Code: "" },
-    { Authors: "Adams, Rhys M; Mora, Thierry; Walczak, Aleksandra M; Kinney, Justin B", Title: "Measuring the sequence-affinity landscape of antibodies with massively parallel titration curves", Publication: "eLife", Volume: "5", Number: "", Pages: "e23156", Year: "2016", Paper: "", PDF: "", Code: "" },
-    { Authors: "Kinney, Justin B", Title: "Unification of field theory and maximum entropy methods for learning probability densities", Publication: "Physical Review E", Volume: "92", Number: "", Pages: "032107", Year: "2015", Paper: "", PDF: "", Code: "" },
-    { Authors: "Atwal, Gurinder S; Kinney, Justin B", Title: "Learning quantitative sequence–function relationships from massively parallel experiments", Publication: "Journal of Statistical Physics", Volume: "", Number: "", Pages: "1-41", Year: "2015", Paper: "", PDF: "", Code: "" },
-    { Authors: "Kinney, Justin B", Title: "Estimation of probability densities using scale-free field theories", Publication: "Physical Review E", Volume: "90", Number: "", Pages: "011301(R)", Year: "2014", Paper: "", PDF: "", Code: "" },
-    { Authors: "Kinney, Justin B; Atwal, Gurinder S", Title: "Parametric inference in the large data limit using maximally informative models", Publication: "Neural Computation", Volume: "26", Number: "4", Pages: "637-665", Year: "2014", Paper: "", PDF: "", Code: "" },
-    { Authors: "Kinney, Justin B; Atwal, Gurinder S", Title: "Equitability, mutual information, and the maximal information coefficient", Publication: "Proceedings of the National Academy of Sciences USA", Volume: "111", Number: "9", Pages: "3354-3359", Year: "2014", Paper: "", PDF: "", Code: "" },
-    { Authors: "Kinney, Justin B; Murugan, Anand; Callan, Curtis G; Cox, Edward C", Title: "Using deep sequencing to characterize the biophysical mechanism of a transcriptional regulatory sequence", Publication: "Proceedings of the National Academy of Sciences USA", Volume: "107", Number: "20", Pages: "9158-9163", Year: "2010", Paper: "", PDF: "", Code: "" },
-    { Authors: "Kinney, Justin B; Tkačik, Gašper; Callan, Curtis G", Title: "Precise physical models of protein–DNA interaction from high-throughput data", Publication: "Proceedings of the National Academy of Sciences USA", Volume: "104", Number: "2", Pages: "501-506", Year: "2007", Paper: "", PDF: "", Code: "" }
+    { title: "A developmental timer coordinates organism-wide microRNA transcription", authors: "P Wu, J Wang, B Pryor, I Valentino, DF Ritter, K Loel, J Kinney, S Ercan, ...", venue: "bioRxiv, 2026.01. 21.700890, 2026", year: "2026", code: "", pdf: "" },
+    { title: "Gauge fixing for sequence-function relationships", authors: "A Posfai, J Zhou, DM McCandlish, JB Kinney", venue: "PLoS Computational Biology 21 (3), e1012818, 2025", year: "2025", code: "https://github.com/jbkinney/gaugefixer", pdf: "" },
+    { title: "Inference and visualization of complex genotype-phenotype maps with gpmap-tools", authors: "C Martí-Gómez, J Zhou, WC Chen, A Stoltzfus, JB Kinney, ...", venue: "bioRxiv, 2025", year: "2025", code: "", pdf: "" },
+    { title: "Symmetry, gauge freedoms, and the interpretability of sequence-function relationships", authors: "A Posfai, DM McCandlish, JB Kinney", venue: "Physical Review Research 7 (2), 023005, 2025", year: "2025", code: "", pdf: "" },
+    { title: "On learning functions over biological sequence space: relating Gaussian process priors, regularization, and gauge fixing", authors: "S Petti, C Martí-Gómez, JB Kinney, J Zhou, DM McCandlish", venue: "arXiv preprint arXiv:2504.19034, 2025", year: "2025", code: "", pdf: "" },
+    { title: "Uncovering the mechanistic landscape of regulatory DNA with deep learning", authors: "EE Seitz, DM McCandlish, JB Kinney, PK Koo", venue: "bioRxiv, 2025.10. 07.681052, 2025", year: "2025", code: "", pdf: "" },
+    { title: "Algebraic and Diagrammatic Methods for the Rule-Based Modeling of Multiparticle Complexes", authors: "RJ Rousseau, JB Kinney", venue: "PRX Life 3 (2), 023004, 2025", year: "2025", code: "", pdf: "" },
+    { title: "GaugeFixer: overcoming parameter non-identifiability in models of sequence-function relationships", authors: "C Martí-Gómez, DM McCandlish, JB Kinney", venue: "bioRxiv, 2025.12. 08.693054, 2025", year: "2025", code: "", pdf: "" },
+    { title: "Structural basis of DNA-dependent coactivator recruitment by the tuft cell master regulator POU2F3", authors: "A Alpsoy, JJ Ipsaro, D Skopelitis, S Pal, FS Chung, S Carpenter, ...", venue: "Cell reports 44 (11), 2025", year: "2025", code: "", pdf: "" },
+    { title: "HENMT1 restricts endogenous retrovirus activity by methylation of 3'-tRNA fragments", authors: "JI Steinberg, H Sertznig, JJ Desmarais, J Wilken, D Rubio, M Peacey, ...", venue: "bioRxiv, 2025.05. 12.650695, 2025", year: "2025", code: "", pdf: "" },
+    { title: "Specificity, synergy, and mechanisms of splice-modifying drugs", authors: "Y Ishigami, MS Wong, C Martí-Gómez, A Ayaz, M Kooshkbaghi, ...", venue: "Nature Communications 15 (1), 1880, 2024", year: "2024", code: "", pdf: "" },
+    { title: "Interpreting cis-regulatory mechanisms from genomic deep neural networks using surrogate models", authors: "EE Seitz, DM McCandlish, JB Kinney, PK Koo", venue: "Nature machine intelligence 6 (6), 701-713, 2024", year: "2024", code: "", pdf: "" },
+    { title: "MAVE-NN: learning genotype-phenotype maps from multiplex assays of variant effect", authors: "A Tareen, M Kooshkbaghi, A Posfai, WT Ireland, DM McCandlish, ...", venue: "Genome biology 23 (1), 98, 2022", year: "2022", code: "", pdf: "" },
+    { title: "Higher-order epistasis and phenotypic prediction", authors: "J Zhou, MS Wong, WC Chen, AR Krainer, JB Kinney, DM McCandlish", venue: "Proceedings of the National Academy of Sciences 119 (39), e2204233119, 2022", year: "2022", code: "", pdf: "" },
+    { title: "Structural and mechanistic basis of σ-dependent transcriptional pausing", authors: "C Pukhrambam, V Molodtsov, M Kooshkbaghi, A Tareen, H Vu, ...", venue: "Proceedings of the National Academy of Sciences 119 (23), e2201301119, 2022", year: "2022", code: "", pdf: "" },
+    { title: "Promoter-sequence determinants and structural basis of primer-dependent transcription initiation in Escherichia coli", authors: "KS Skalenko, L Li, Y Zhang, IO Vvedenskaya, JT Winkelman, AL Cope, ...", venue: "Proceedings of the National Academy of Sciences 118 (27), e2106388118, 2021", year: "2021", code: "", pdf: "" },
+    { title: "Field-theoretic density estimation for biological sequence space with applications to 5′ splice site diversity and aneuploidy in cancer", authors: "WC Chen, J Zhou, JM Sheltzer, JB Kinney, DM McCandlish", venue: "Proceedings of the National Academy of Sciences 118 (40), e2025782118, 2021", year: "2021", code: "", pdf: "" },
+    { title: "Logomaker: beautiful sequence logos in Python", authors: "A Tareen, JB Kinney", venue: "Bioinformatics 36 (7), 2272-2274, 2020", year: "2020", code: "", pdf: "" },
+    { title: "Deciphering the regulatory genome of Escherichia coli, one hundred promoters at a time", authors: "WT Ireland, SM Beeler, E Flores-Bautista, NS McCarty, T Röschinger, ...", venue: "Elife 9, e55308, 2020", year: "2020", code: "", pdf: "" },
+    { title: "Evolution of DNA replication origin specification and gene silencing mechanisms", authors: "Y Hu, A Tareen, YJ Sheu, WT Ireland, C Speck, H Li, L Joshua-Tor, ...", venue: "Nature communications 11 (1), 5175, 2020", year: "2020", code: "", pdf: "" },
+    { title: "Non-parametric Bayesian density estimation for biological sequence space with applications to pre-mRNA splicing and the karyotypic diversity of human cancer", authors: "WC Chen, J Zhou, JM Sheltzer, JB Kinney, DM McCandlish", venue: "BioRxiv, 2020.11. 25.399253, 2020", year: "2020", code: "", pdf: "" },
+    { title: "Empirical variance component regression for sequence-function relationships", authors: "J Zhou, M Wong, WC Chen, A Krainer, J Kinney, D McCandlish", venue: "BioRxiv, 2020", year: "2020", code: "", pdf: "" },
+    { title: "Massively parallel assays and quantitative sequence–function relationships", authors: "JB Kinney, DM McCandlish", venue: "Annual review of genomics and human genetics 20 (1), 99-127, 2019", year: "2019", code: "", pdf: "" },
+    { title: "Mapping DNA sequence to transcription factor binding energy in vivo", authors: "SL Barnes, NM Belliveau, WT Ireland, JB Kinney, R Phillips", venue: "PLoS computational biology 15 (2), e1006226, 2019", year: "2019", code: "", pdf: "" },
+    { title: "Epistasis in a fitness landscape defined by antibody-antigen binding free energy", authors: "RM Adams, JB Kinney, AM Walczak, T Mora", venue: "Cell systems 8 (1), 86-93. e3, 2019", year: "2019", code: "", pdf: "" },
+    { title: "Biophysical models of cis-regulation as interpretable neural networks", authors: "A Tareen, JB Kinney", venue: "arXiv preprint arXiv:2001.03560, 2019", year: "2019", code: "", pdf: "" },
+    { title: "Quantitative Activity Profile and Context Dependence of All Human 5′ Splice Sites", authors: "MS Wong, JB Kinney, AR Krainer", venue: "Molecular cell 71 (6), 1012-1026.e3, 2018", year: "2018", code: "", pdf: "" },
+    { title: "Systematic approach for dissecting the molecular mechanisms of transcriptional regulation in bacteria", authors: "NM Belliveau, SL Barnes, WT Ireland, DL Jones, MJ Sweredoski, ...", venue: "Proceedings of the National Academy of Sciences 115 (21), E4796-E4805, 2018", year: "2018", code: "", pdf: "" },
+    { title: "A transcription factor addiction in leukemia imposed by the MLL promoter sequence", authors: "B Lu, O Klingbeil, Y Tarumoto, TDD Somerville, YH Huang, Y Wei, ...", venue: "Cancer Cell 34 (6), 970-981. e8, 2018", year: "2018", code: "", pdf: "" },
+    { title: "Density estimation on small data sets", authors: "WC Chen, A Tareen, JB Kinney", venue: "Physical review letters 121 (16), 160605, 2018", year: "2018", code: "", pdf: "" },
+    { title: "Measuring cis-regulatory energetics in living cells using allelic manifolds", authors: "TL Forcier, A Ayaz, MS Gill, D Jones, R Phillips, JB Kinney", venue: "Elife 7, e40618, 2018", year: "2018", code: "", pdf: "" },
+    { title: "Selection for protein stability enriches for epistatic interactions", authors: "A Posfai, J Zhou, JB Plotkin, JB Kinney, DM McCandlish", venue: "Genes 9 (9), 423, 2018", year: "2018", code: "", pdf: "" },
+    { title: "Precision measurements of regulatory energetics in living cells", authors: "T Forcier, A Ayaz, M Gill, JB Kinney", venue: "bioRxiv, 2018", year: "2018", code: "", pdf: "" },
+    { title: "Inducible CRISPR-based Genome Editing for the Characterization of Cancer Genes", authors: "N Sachan, M Miller, NH Shirole, S Senturk, V Corbo, JB Kinney, ...", venue: "Genome Editing and Engineering: From TALENs, ZFNs and CRISPRs to Molecular …, 2018", year: "2018", code: "", pdf: "" },
+    { title: "Rapid and tunable method to temporally control gene editing based on conditional Cas9 stabilization", authors: "S Senturk, NH Shirole, DG Nowak, V Corbo, D Pal, A Vaughan, ...", venue: "Nature Communications 8, 14370, 2017", year: "2017", code: "", pdf: "" },
+    { title: "Rapid generation of drug-resistance alleles at endogenous loci using CRISPR-Cas9 indel mutagenesis", authors: "JJ Ipsaro, C Shen, A Eri, Y Xu, JB Kinney, L Joshua-Tor, CR Vakoc, J Shi", venue: "PLoS One 12 (2), e0172177, 2017", year: "2017", code: "", pdf: "" },
+    { title: "Measuring the sequence-affinity landscape of antibodies with massively parallel titration curves", authors: "RM Adams, T Mora, AM Walczak, JB Kinney", venue: "Elife 5, e23156, 2016", year: "2016", code: "", pdf: "" },
+    { title: "Concerted activities of Mcm4, Sld3, and Dbf4 in control of origin activation and DNA replication fork progression", authors: "YJ Sheu, JB Kinney, B Stillman", venue: "Genome research 26 (3), 315-330, 2016", year: "2016", code: "", pdf: "" },
+    { title: "MPAthic: quantitative modeling of sequence-function relationships for massively parallel assays.", authors: "WT Ireland, JB Kinney", venue: "Preprint at http://biorxiv. org/content/early/2016/05/21/054676, 2016", year: "2016", code: "", pdf: "" },
+    { title: "Modeling multi-particle complexes in stochastic chemical systems", authors: "MJ Morrison, JB Kinney", venue: "arXiv preprint arXiv:1603.07369, 2016", year: "2016", code: "", pdf: "" },
+    { title: "Methods of identifying essential protein domains", authors: "CH Vakoc, J Shi, JB Kinney", venue: "", year: "2016", code: "", pdf: "" },
+    { title: "Discovery of cancer drug targets by CRISPR-Cas9 screening of protein domains", authors: "J Shi, E Wang, JP Milazzo, Z Wang, JB Kinney, CR Vakoc", venue: "Nature Biotechnology 33, 661-667, 2015", year: "2015", code: "", pdf: "" },
+    { title: "The transcriptional cofactor TRIM33 prevents apoptosis in B lymphoblastic leukemia by deactivating a single enhancer", authors: "E Wang, S Kawaoka, JS Roe, J Shi, AF Hohmann, Y Xu, AS Bhagwat, ...", venue: "elife 4, e06377, 2015", year: "2015", code: "", pdf: "" },
+    { title: "Learning quantitative sequence–function relationships from massively parallel experiments", authors: "GS Atwal, JB Kinney", venue: "Journal of Statistical Physics, 1-41, 2015", year: "2015", code: "", pdf: "" },
+    { title: "Unification of field theory and maximum entropy methods for learning probability densities", authors: "JB Kinney", venue: "Physical Review E 92, 032107, 2015", year: "2015", code: "", pdf: "" },
+    { title: "Equitability, mutual information, and the maximal information coefficient", authors: "JB Kinney, GS Atwal", venue: "Proceedings of the National Academy of Sciences USA 111 (9), 3354-3359, 2014", year: "2014", code: "", pdf: "" },
+    { title: "Domain within the helicase subunit Mcm4 integrates multiple kinase signals to control DNA replication initiation and fork progression", authors: "YJ Sheu, JB Kinney, A Lengronne, P Pasero, B Stillman", venue: "Proceedings of the National Academy of Sciences USA 111 (18), E1899-E1908, 2014", year: "2014", code: "", pdf: "" },
+    { title: "Comparison of the theoretical and real-world evolutionary potential of a genetic circuit", authors: "M Razo-Mejia, JQ Boedicker, D Jones, A DeLuna, JB Kinney, R Phillips", venue: "Physical Biology 11 (2), 026005, 2014", year: "2014", code: "", pdf: "" },
+    { title: "Parametric inference in the large data limit using maximally informative models", authors: "JB Kinney, GS Atwal", venue: "Neural Computation 26 (4), 637-665, 2014", year: "2014", code: "", pdf: "" },
+    { title: "Estimation of probability densities using scale-free field theories", authors: "JB Kinney", venue: "Physical Review E 90, 011301(R), 2014", year: "2014", code: "", pdf: "" },
+    { title: "Reply to Reshef et al.: Falsifiability or bust", authors: "JB Kinney, GS Atwal", venue: "Proceedings of the National Academy of Sciences USA 111 (33), E3364-E3364, 2014", year: "2014", code: "", pdf: "" },
+    { title: "Reply to Murrell et al.: Noise matters", authors: "JB Kinney, GS Atwal", venue: "Proceedings of the National Academy of Sciences USA 111 (21), E2161-E2161, 2014", year: "2014", code: "", pdf: "" },
+    { title: "Mutual information: a universal measure of statistical dependence.", authors: "JB Kinney", venue: "Biomedical Computation Review 10 (2), 33, 2014", year: "2014", code: "", pdf: "" },
+    { title: "Evaluation of methods for modeling transcription factor sequence specificity", authors: "MT Weirauch, A Cote, R Norel, M Annala, Y Zhao, TR Riley, ...", venue: "Nature biotechnology 31 (2), 126-134, 2013", year: "2013", code: "", pdf: "" },
+    { title: "Systematic dissection and optimization of inducible enhancers in human cells using a massively parallel reporter assay", authors: "A Melnikov, A Murugan, X Zhang, T Tesileanu, L Wang, P Rogov, S Feizi, ...", venue: "Nature Biotechnology 30 (3), 271-277, 2012", year: "2012", code: "", pdf: "" },
+    { title: "Using deep sequencing to characterize the biophysical mechanism of a transcriptional regulatory sequence", authors: "JB Kinney, A Murugan, CG Callan, EC Cox", venue: "Proceedings of the National Academy of Sciences USA 107 (20), 9158-9163, 2010", year: "2010", code: "", pdf: "" },
+    { title: "Energy-dependent fitness: a quantitative model for the evolution of yeast transcription factor binding sites", authors: "V Mustonen, J Kinney, CG Callan, M Lässig", venue: "Proceedings of the National Academy of Sciences USA 105 (34), 12376-12381, 2008", year: "2008", code: "", pdf: "" },
+    { title: "Biophysical models of transcriptional regulation from sequence data", authors: "JB Kinney", venue: "Princeton University, 2008", year: "2008", code: "", pdf: "" },
+    { title: "An index for 4 dimensional super conformal theories", authors: "JB Kinney, J Maldacena, S Minwalla, S Raju", venue: "Communications in Mathematical Physics 275 (1), 209-254, 2007", year: "2007", code: "", pdf: "" },
+    { title: "Precise physical models of protein–DNA interaction from high-throughput data", authors: "JB Kinney, G Tkačik, CG Callan", venue: "Proceedings of the National Academy of Sciences USA 104 (2), 501-506, 2007", year: "2007", code: "", pdf: "" }
 ];
 
 // Format authors to highlight Kinney
 function formatAuthors(authorsStr) {
     if (!authorsStr) return '';
     
-    // Split authors and format
-    const authors = authorsStr.split(';').map(a => a.trim()).filter(a => a);
+    // Split authors by comma and format
+    const authors = authorsStr.split(',').map(a => a.trim()).filter(a => a);
     
     return authors.map(author => {
         // Check if this is Kinney (various formats)
@@ -338,45 +395,24 @@ function formatAuthors(authorsStr) {
     }).join(', ');
 }
 
-// Format journal citation
-function formatJournalCitation(pub) {
-    let citation = `<em>${pub.Publication || ''}</em>`;
-    
-    if (pub.Volume) {
-        citation += ` ${pub.Volume}`;
-        if (pub.Number) {
-            citation += `(${pub.Number})`;
-        }
-    }
-    
-    if (pub.Pages) {
-        citation += `: ${pub.Pages}`;
-    }
-    
-    citation += ` (${pub.Year})`;
-    
-    return citation;
-}
-
 // Create HTML for a single publication
 function createPublicationHTML(pub) {
-    const title = pub.Title || '';
-    const authors = formatAuthors(pub.Authors);
-    const journal = formatJournalCitation(pub);
+    const title = pub.title || '';
+    const authors = formatAuthors(pub.authors);
+    const venue = pub.venue || '';
     
     // Build links HTML
-    const paperLink = pub.Paper ? `<a href="${pub.Paper}" class="pub-link" target="_blank">Paper</a>` : '';
-    const pdfLink = pub.PDF ? `<a href="${pub.PDF}" class="pub-link" target="_blank">PDF</a>` : '';
-    const codeLink = pub.Code ? `<a href="${pub.Code}" class="pub-link" target="_blank">Code</a>` : '';
+    const pdfLink = pub.pdf ? `<a href="${pub.pdf}" class="pub-link" target="_blank">PDF</a>` : '';
+    const codeLink = pub.code ? `<a href="${pub.code}" class="pub-link" target="_blank">Code</a>` : '';
     
-    const linksHTML = [paperLink, pdfLink, codeLink].filter(l => l).join('');
+    const linksHTML = [pdfLink, codeLink].filter(l => l).join('');
     const linksSection = linksHTML ? `<div class="pub-links">${linksHTML}</div>` : '';
     
     return `
         <div class="pub-item">
             <h3 class="pub-title">${title}</h3>
             <p class="pub-authors">${authors}</p>
-            <p class="pub-journal">${journal}</p>
+            <p class="pub-journal"><em>${venue}</em></p>
             ${linksSection}
         </div>
     `;
@@ -404,7 +440,7 @@ function renderPublications(publications) {
     // Group by year
     const byYear = {};
     publications.forEach(pub => {
-        const year = pub.Year || 'Unknown';
+        const year = pub.year || 'Unknown';
         if (!byYear[year]) {
             byYear[year] = [];
         }
@@ -424,10 +460,29 @@ function renderPublications(publications) {
 }
 
 // Load and display publications
-function loadPublications() {
+async function loadPublications() {
     const container = document.getElementById('publications-container');
     if (!container) return;
     
-    // Use the embedded publications data directly
+    // Try to fetch from CSV first (works on deployed site)
+    try {
+        const response = await fetch('backend/scholar_publications.csv');
+        if (!response.ok) {
+            throw new Error('Failed to load CSV');
+        }
+        
+        const csvText = await response.text();
+        const publications = parseCSV(csvText);
+        
+        if (publications.length > 0) {
+            renderPublications(publications);
+            return;
+        }
+    } catch (error) {
+        // Fetch failed (likely local file:// access), use fallback
+        console.log('Using embedded publications data');
+    }
+    
+    // Fall back to embedded data
     renderPublications(fallbackPublicationsData);
 }

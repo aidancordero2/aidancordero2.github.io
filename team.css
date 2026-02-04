@@ -13,7 +13,7 @@
 }
 
 .error-message {
-    color: var(--accent);
+    color: #cc0000;
 }
 
 .team-grid {
@@ -45,7 +45,7 @@
     border-radius: 50%;
     overflow: hidden;
     margin: 0 auto 1rem;
-    background: var(--primary);
+    background: #e5e5e5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -55,7 +55,7 @@
 }
 
 .team-member:hover .member-photo {
-    outline-color: var(--accent);
+    outline-color: #000000;
 }
 
 .member-photo img {
@@ -73,12 +73,12 @@
     font-family: 'Crimson Pro', Georgia, serif;
     font-size: 1.15rem;
     font-weight: 600;
-    color: var(--text-dark);
+    color: #000000;
     margin-bottom: 0.25rem;
 }
 
 .member-role {
-    color: var(--accent);
+    color: #555555;
     font-weight: 500;
     font-size: 0.8rem;
     text-transform: uppercase;
@@ -107,9 +107,9 @@
 }
 
 .team-social:hover:not(.disabled) {
-    background: var(--accent);
+    background: #000000;
     color: white;
-    border-color: var(--accent);
+    border-color: #000000;
 }
 
 .team-social.disabled {

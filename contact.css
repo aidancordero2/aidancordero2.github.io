@@ -1,132 +1,120 @@
 .contact-section {
-    padding: 3rem 0;
+    padding: 6rem 0 3rem 0;
     background: var(--bg-white);
 }
 
-.contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-}
-
-.contact-info h2,
-.opportunities h2 {
-    font-family: 'Crimson Pro', Georgia, serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 1rem;
-}
-
-.contact-intro {
-    font-size: 1.15rem;
-    color: var(--text-medium);
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-}
-
-.info-items {
+.contact-layout {
     display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-}
-
-.info-item {
-    display: flex;
-    gap: 1rem;
+    justify-content: space-between;
     align-items: flex-start;
-    padding: 0.75rem 0;
+    gap: 4rem;
 }
 
-.info-icon {
-    font-size: 1.5rem;
+.contact-content {
+    max-width: 600px;
+    flex: 1;
+}
+
+.contact-logo {
     flex-shrink: 0;
 }
 
-.info-content h3 {
+.contact-logo img {
+    max-width: 280px;
+    height: auto;
+}
+
+.contact-content .section-header {
+    margin-bottom: 1.5rem;
+}
+
+.contact-content .section-header h2 {
     font-family: 'Crimson Pro', Georgia, serif;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 0.25rem;
-}
-
-.info-content p {
-    color: var(--text-medium);
-    line-height: 1.8;
-    font-size: 1.1rem;
-}
-
-.info-content a {
-    color: var(--accent);
-    text-decoration: none;
-}
-
-.info-content a:hover {
-    text-decoration: underline;
-}
-
-.opportunity-card {
-    padding: 0.75rem 0;
+    color: #000000;
     margin-bottom: 0.5rem;
 }
 
-.opportunity-card h3 {
-    font-family: 'Crimson Pro', Georgia, serif;
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 0.5rem;
+.pi-info {
+    margin-bottom: 3rem;
 }
 
-.opportunity-card p {
-    color: var(--text-medium);
-    line-height: 1.8;
-    font-size: 1.1rem;
-}
-
-.map-placeholder {
-    background: var(--bg-light);
-    padding: 3rem 0;
-    border-top: 1px solid var(--border);
-}
-
-.map-card {
-    background: var(--bg-white);
-    padding: 3rem;
-    border-radius: 8px;
-    text-align: center;
-    border: 1px dashed var(--border);
-}
-
-.map-card h3 {
+.pi-name {
     font-family: 'Crimson Pro', Georgia, serif;
     font-size: 1.35rem;
     font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 0.75rem;
+    color: #000000;
+    margin-bottom: 1.25rem;
 }
 
-.map-card p {
-    color: var(--text-light);
-    font-size: 1rem;
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.contact-line {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-medium);
+    font-size: 1.1rem;
+}
+
+.contact-line svg {
+    color: #000000;
+    flex-shrink: 0;
+}
+
+.contact-line a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.contact-line a:hover {
+    text-decoration: underline;
+}
+
+.mailing-address {
+    margin-top: 2rem;
+}
+
+.mailing-address p {
+    color: var(--text-medium);
+    font-size: 1.1rem;
+    line-height: 1.8;
 }
 
 @media (max-width: 968px) {
-    .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
+    .contact-layout {
+        flex-direction: column;
+        gap: 3rem;
+    }
+    
+    .contact-logo {
+        order: -1;
+    }
+    
+    .contact-logo img {
+        max-width: 220px;
     }
 }
 
 @media (max-width: 768px) {
-    .info-item {
-        flex-direction: column;
-        gap: 0.75rem;
+    .contact-section {
+        padding: 4rem 0 2rem 0;
     }
     
-    .contact-info h2,
-    .opportunities h2 {
+    .contact-content .section-header h2 {
         font-size: 1.35rem;
+    }
+    
+    .pi-name {
+        font-size: 1.2rem;
+    }
+    
+    .contact-logo img {
+        max-width: 180px;
     }
 }
