@@ -501,16 +501,16 @@ async function loadPublications() {
 
 // ===== ALUMNI SECTION DYNAMIC LOADING =====
 
-// Parse TSV (tab-separated) data
-function parseTSV(csvText) {
+// Parse alumni CSV data
+function parseAlumniCSV(csvText) {
     const lines = csvText.trim().split('\n');
     if (lines.length < 2) return [];
     
-    const headers = lines[0].split('\t').map(h => h.trim());
+    const headers = lines[0].split(',').map(h => h.trim());
     const data = [];
     
     for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split('\t');
+        const values = lines[i].split(',');
         if (values.length >= headers.length) {
             const row = {};
             headers.forEach((header, index) => {
@@ -592,7 +592,7 @@ async function loadAlumni() {
         }
         
         const csvText = await response.text();
-        const alumni = parseTSV(csvText);
+        const alumni = parseAlumniCSV(csvText);
         
         if (alumni.length > 0) {
             renderAlumni(alumni);
