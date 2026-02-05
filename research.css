@@ -74,6 +74,8 @@
 .tool-card {
     padding: 0;
     margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .tool-card h3 {
@@ -98,6 +100,7 @@
     line-height: 1.8;
     font-size: 1.1rem;
     margin-bottom: 1rem;
+    flex-grow: 1;
 }
 
 .tool-link {
