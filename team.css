@@ -173,13 +173,14 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 1rem;
+    border: 1px solid #e5e5e5;
 }
 
 .alumni-table th,
 .alumni-table td {
     padding: 0.75rem 1rem;
     text-align: left;
-    border-bottom: 1px solid #e5e5e5;
+    border: 1px solid #e5e5e5;
 }
 
 .alumni-table th {
