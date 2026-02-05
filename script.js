@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadPublications();
     }
     
-    // Load alumni if on research page
+    // Load alumni if on team page
     if (document.getElementById('alumni-container')) {
         loadAlumni();
     }
@@ -503,23 +503,26 @@ async function loadPublications() {
 
 // Parse alumni CSV data
 function parseAlumniCSV(csvText) {
-    const lines = csvText.trim().split('\n');
+    // Handle Windows line endings and trim
+    const lines = csvText.replace(/\r/g, '').trim().split('\n');
     if (lines.length < 2) return [];
     
     const headers = lines[0].split(',').map(h => h.trim());
     const data = [];
     
     for (let i = 1; i < lines.length; i++) {
-        const values = lines[i].split(',');
-        if (values.length >= headers.length) {
-            const row = {};
-            headers.forEach((header, index) => {
-                row[header] = values[index] ? values[index].trim() : '';
-            });
-            data.push(row);
-        }
+        const line = lines[i].trim();
+        if (!line) continue; // Skip empty lines
+        
+        const values = line.split(',');
+        const row = {};
+        headers.forEach((header, index) => {
+            row[header] = values[index] ? values[index].trim() : '';
+        });
+        data.push(row);
     }
     
+    console.log('Parsed alumni data:', data);
     return data;
 }
 
@@ -585,13 +588,19 @@ async function loadAlumni() {
     const container = document.getElementById('alumni-container');
     if (!container) return;
     
+    console.log('Loading alumni...');
+    
     try {
         const response = await fetch('backend/alumni.csv');
+        console.log('Fetch response:', response.status);
+        
         if (!response.ok) {
             throw new Error('Failed to load alumni.csv');
         }
         
         const csvText = await response.text();
+        console.log('CSV text:', csvText);
+        
         const alumni = parseAlumniCSV(csvText);
         
         if (alumni.length > 0) {
