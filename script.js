@@ -63,6 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('publications-container')) {
         loadPublications();
     }
+    
+    // Load alumni if on research page
+    if (document.getElementById('alumni-container')) {
+        loadAlumni();
+    }
 });
 
 // ===== TEAM PAGE DYNAMIC LOADING =====
@@ -492,4 +497,110 @@ async function loadPublications() {
     
     // Fall back to embedded data
     renderPublications(fallbackPublicationsData);
+}
+
+// ===== ALUMNI SECTION DYNAMIC LOADING =====
+
+// Parse TSV (tab-separated) data
+function parseTSV(csvText) {
+    const lines = csvText.trim().split('\n');
+    if (lines.length < 2) return [];
+    
+    const headers = lines[0].split('\t').map(h => h.trim());
+    const data = [];
+    
+    for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split('\t');
+        if (values.length >= headers.length) {
+            const row = {};
+            headers.forEach((header, index) => {
+                row[header] = values[index] ? values[index].trim() : '';
+            });
+            data.push(row);
+        }
+    }
+    
+    return data;
+}
+
+// Create HTML for an alumni table
+function createAlumniTableHTML(sectionName, alumni) {
+    const rows = alumni.map(person => `
+        <tr>
+            <td>${person['Name'] || ''}</td>
+            <td>${person['Position'] || ''}</td>
+            <td>${person['Program'] || ''}</td>
+            <td>${person['Time in Lab'] || ''}</td>
+            <td>${person['Current Position'] || ''}</td>
+        </tr>
+    `).join('');
+    
+    return `
+        <div class="alumni-table-section">
+            <h3>${sectionName}</h3>
+            <table class="alumni-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Program</th>
+                        <th>Time in Lab</th>
+                        <th>Current Position</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+// Render alumni grouped by section
+function renderAlumni(alumni) {
+    const container = document.getElementById('alumni-container');
+    if (!container) return;
+    
+    // Group by section
+    const bySection = {};
+    alumni.forEach(person => {
+        const section = person['Section'] || 'Other';
+        if (!bySection[section]) {
+            bySection[section] = [];
+        }
+        bySection[section].push(person);
+    });
+    
+    // Build HTML for each section
+    let html = '';
+    Object.keys(bySection).forEach(section => {
+        html += createAlumniTableHTML(section, bySection[section]);
+    });
+    
+    container.innerHTML = html;
+}
+
+// Load and display alumni
+async function loadAlumni() {
+    const container = document.getElementById('alumni-container');
+    if (!container) return;
+    
+    try {
+        const response = await fetch('backend/alumni.csv');
+        if (!response.ok) {
+            throw new Error('Failed to load alumni.csv');
+        }
+        
+        const csvText = await response.text();
+        const alumni = parseTSV(csvText);
+        
+        if (alumni.length > 0) {
+            renderAlumni(alumni);
+        } else {
+            container.innerHTML = '<p class="error-message">No alumni data found.</p>';
+        }
+    } catch (error) {
+        console.log('Could not load alumni:', error.message);
+        container.innerHTML = '<p class="error-message">Unable to load alumni data.</p>';
+    }
 }
