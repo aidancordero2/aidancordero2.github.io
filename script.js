@@ -190,7 +190,8 @@ const fallbackTeamData = [
         Position: 'Principal Investigator',
         Photo: '/pictures/justin_picture.png',
         GitHub: 'https://github.com/jbkinney',
-        GoogleScholar: 'https://scholar.google.com/citations?user=lAS1T9BopYMC&hl=en'
+        GoogleScholar: 'https://scholar.google.com/citations?user=lAS1T9BopYMC&hl=en',
+        Bio: ''
     },
     {
         Name: 'John Desmarais',
@@ -198,7 +199,8 @@ const fallbackTeamData = [
         Position: 'Postdoc',
         Photo: '',
         GitHub: '',
-        GoogleScholar: ''
+        GoogleScholar: '',
+        Bio: ''
     },
     {
         Name: 'Zhihan Liu',
@@ -206,7 +208,8 @@ const fallbackTeamData = [
         Position: 'Postdoc',
         Photo: '',
         GitHub: 'https://github.com/Zhihan-Leo-Liu',
-        GoogleScholar: ''
+        GoogleScholar: '',
+        Bio: ''
     },
     {
         Name: 'Kaiser Loell',
@@ -214,7 +217,8 @@ const fallbackTeamData = [
         Position: 'Postdoc',
         Photo: '',
         GitHub: '',
-        GoogleScholar: ''
+        GoogleScholar: '',
+        Bio: ''
     },
     {
         Name: 'Deborah Tenenbaum',
@@ -222,7 +226,8 @@ const fallbackTeamData = [
         Position: 'Postdoc',
         Photo: '',
         GitHub: '',
-        GoogleScholar: ''
+        GoogleScholar: '',
+        Bio: ''
     },
     {
         Name: 'Andalus Ayaz',
@@ -230,7 +235,8 @@ const fallbackTeamData = [
         Position: 'Research Technician',
         Photo: '/pictures/andalus_picture.png',
         GitHub: '',
-        GoogleScholar: ''
+        GoogleScholar: '',
+        Bio: ''
     },
     {
         Name: 'Aidan Cordero',
@@ -238,7 +244,8 @@ const fallbackTeamData = [
         Position: 'Computational Science Developer',
         Photo: '/pictures/aidan_picture.png',
         GitHub: 'https://github.com/aidancordero2',
-        GoogleScholar: 'https://scholar.google.com/citations?hl=en&user=No7MvSYAAAAJ'
+        GoogleScholar: 'https://scholar.google.com/citations?hl=en&user=No7MvSYAAAAJ',
+        Bio: 'Aidan is a Computational Science Developer in the Kinney Lab.'
     }
 ];
 
@@ -622,6 +629,7 @@ function createPersonHTML(person) {
     const photo = normalizePath(person['Photo'] || '');
     const github = person['GitHub'] || '';
     const scholar = person['GoogleScholar'] || '';
+    const bio = person['Bio'] || '';
     
     // Photo HTML
     let photoHTML;
@@ -650,12 +658,19 @@ function createPersonHTML(person) {
         linksHTML += '</div>';
     }
     
+    // Build bio section
+    let bioHTML = '';
+    if (bio) {
+        bioHTML = `<div class="person-bio">${bio}</div>`;
+    }
+    
     return `
         <div class="person-profile">
             <div class="person-photo">${photoHTML}</div>
             <h1 class="person-name">${name}</h1>
             <p class="person-position">${position}</p>
             ${linksHTML}
+            ${bioHTML}
         </div>
     `;
 }
