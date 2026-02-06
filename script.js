@@ -444,13 +444,14 @@ function createYearSectionHTML(year, publications) {
     `;
 }
 
-// Render publications grouped by year
+// Render publications grouped by year (years descending, publications in CSV order within each year)
 function renderPublications(publications) {
     const container = document.getElementById('publications-container');
     if (!container) return;
     
-    // Group by year
+    // Group by year while preserving CSV order within each year
     const byYear = {};
+    
     publications.forEach(pub => {
         const year = pub.year || 'Unknown';
         if (!byYear[year]) {
@@ -462,7 +463,7 @@ function renderPublications(publications) {
     // Sort years descending (newest first)
     const sortedYears = Object.keys(byYear).sort((a, b) => parseInt(b) - parseInt(a));
     
-    // Build HTML
+    // Build HTML (publications within each year stay in CSV order)
     let html = '';
     sortedYears.forEach(year => {
         html += createYearSectionHTML(year, byYear[year]);
