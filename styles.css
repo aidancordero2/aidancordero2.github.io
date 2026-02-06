@@ -121,6 +121,13 @@ body {
     margin: 0 auto 3rem;
 }
 
+.hero-location {
+    font-size: 0.95rem;
+    color: var(--text-light);
+    letter-spacing: 0.03em;
+    margin-bottom: 0.5rem;
+}
+
 .hero-logo {
     margin-bottom: 1.5rem;
 }

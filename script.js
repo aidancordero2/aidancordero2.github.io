@@ -237,7 +237,7 @@ const fallbackTeamData = [
         Name: 'Andalus Ayaz',
         Section: 'Staff',
         Position: 'Research Technician',
-        Photo: 'pictures/alandus_picture.png',
+        Photo: 'pictures/andalus_picture.png',
         GitHub: '',
         GoogleScholar: ''
     },
