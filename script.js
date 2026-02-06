@@ -68,6 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('alumni-container')) {
         loadAlumni();
     }
+    
+    // Load person if on person page
+    if (document.getElementById('person-container')) {
+        loadPerson();
+    }
 });
 
 // ===== TEAM PAGE DYNAMIC LOADING =====
@@ -123,13 +128,18 @@ function parseCSVLine(line) {
     return result;
 }
 
+// Normalize path to be absolute
+function normalizePath(path) {
+    if (!path) return '';
+    if (path.startsWith('/') || path.startsWith('http')) return path;
+    return '/' + path;
+}
+
 // Create HTML for a team member
 function createTeamMemberHTML(member, isPI = false) {
     const name = member['Name'] || '';
     const position = member['Position'] || '';
-    const photo = member['Photo'] || '';
-    const github = member['GitHub'] || '';
-    const scholar = member['GoogleScholar'] || '';
+    const photo = normalizePath(member['Photo'] || '');
     
     // Create photo HTML
     let photoHTML;
@@ -139,35 +149,15 @@ function createTeamMemberHTML(member, isPI = false) {
         photoHTML = `<div class="photo-placeholder">👤</div>`;
     }
     
-    // Wrap PI photo in link to contact page
-    let photoSection;
-    if (isPI) {
-        photoSection = `<a href="contact.html" class="member-photo-link"><div class="member-photo">${photoHTML}</div></a>`;
-    } else {
-        photoSection = `<div class="member-photo">${photoHTML}</div>`;
-    }
-    
-    // Create social links HTML - always show both icons
-    let githubHTML, scholarHTML;
-    
-    if (github) {
-        githubHTML = `<a href="${github}" class="team-social" title="GitHub" target="_blank">${githubIcon}</a>`;
-    } else {
-        githubHTML = `<span class="team-social disabled" title="GitHub">${githubIcon}</span>`;
-    }
-    
-    if (scholar) {
-        scholarHTML = `<a href="${scholar}" class="team-social" title="Google Scholar" target="_blank">${scholarIcon}</a>`;
-    } else {
-        scholarHTML = `<span class="team-social disabled" title="Google Scholar">${scholarIcon}</span>`;
-    }
+    // All photos link to person page
+    const personUrl = `/person/?name=${encodeURIComponent(name)}`;
+    const photoSection = `<a href="${personUrl}" class="member-photo-link"><div class="member-photo">${photoHTML}</div></a>`;
     
     return `
         <div class="team-member">
             ${photoSection}
             <h3 class="member-name">${name}</h3>
             <p class="member-role">${position}</p>
-            <div class="member-links">${githubHTML}${scholarHTML}</div>
         </div>
     `;
 }
@@ -197,7 +187,7 @@ const fallbackTeamData = [
         Name: 'Justin Kinney',
         Section: 'Principal Investigator',
         Position: 'Principal Investigator',
-        Photo: 'pictures/justin_picture.png',
+        Photo: '/pictures/justin_picture.png',
         GitHub: 'https://github.com/jbkinney',
         GoogleScholar: 'https://scholar.google.com/citations?user=lAS1T9BopYMC&hl=en'
     },
@@ -237,7 +227,7 @@ const fallbackTeamData = [
         Name: 'Andalus Ayaz',
         Section: 'Staff',
         Position: 'Research Technician',
-        Photo: 'pictures/andalus_picture.png',
+        Photo: '/pictures/andalus_picture.png',
         GitHub: '',
         GoogleScholar: ''
     },
@@ -245,7 +235,7 @@ const fallbackTeamData = [
         Name: 'Aidan Cordero',
         Section: 'Staff',
         Position: 'Computational Science Developer',
-        Photo: 'pictures/aidan_picture.png',
+        Photo: '/pictures/aidan_picture.png',
         GitHub: 'https://github.com/aidancordero2',
         GoogleScholar: 'https://scholar.google.com/citations?hl=en&user=No7MvSYAAAAJ'
     }
@@ -612,5 +602,104 @@ async function loadAlumni() {
     } catch (error) {
         console.log('Could not load alumni:', error.message);
         container.innerHTML = '<p class="error-message">Unable to load alumni data.</p>';
+    }
+}
+
+// ===== PERSON PAGE DYNAMIC LOADING =====
+
+// Create HTML for person profile
+function createPersonHTML(person) {
+    const name = person['Name'] || '';
+    const position = person['Position'] || '';
+    const photo = normalizePath(person['Photo'] || '');
+    const github = person['GitHub'] || '';
+    const scholar = person['GoogleScholar'] || '';
+    
+    // Photo HTML
+    let photoHTML;
+    if (photo) {
+        photoHTML = `<img src="${photo}" alt="${name}">`;
+    } else {
+        photoHTML = `<div class="photo-placeholder">👤</div>`;
+    }
+    
+    // Build links
+    let linksHTML = '';
+    if (github || scholar) {
+        linksHTML = '<div class="person-links">';
+        if (github) {
+            linksHTML += `<a href="${github}" class="person-link" target="_blank">
+                ${githubIcon}
+                <span>GitHub</span>
+            </a>`;
+        }
+        if (scholar) {
+            linksHTML += `<a href="${scholar}" class="person-link" target="_blank">
+                ${scholarIcon}
+                <span>Google Scholar</span>
+            </a>`;
+        }
+        linksHTML += '</div>';
+    }
+    
+    return `
+        <div class="person-profile">
+            <div class="person-photo">${photoHTML}</div>
+            <h1 class="person-name">${name}</h1>
+            <p class="person-position">${position}</p>
+            ${linksHTML}
+        </div>
+    `;
+}
+
+// Load and display person
+async function loadPerson() {
+    const container = document.getElementById('person-container');
+    if (!container) return;
+    
+    // Get person name from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const personName = urlParams.get('name');
+    
+    if (!personName) {
+        container.innerHTML = '<p class="error-message">No person specified.</p>';
+        return;
+    }
+    
+    // Update page title
+    document.title = `${personName} | Kinney Lab`;
+    
+    try {
+        const response = await fetch('/backend/people.csv');
+        if (!response.ok) {
+            throw new Error('Failed to load people.csv');
+        }
+        
+        const csvText = await response.text();
+        const people = parseCSV(csvText);
+        
+        // Find the person
+        const person = people.find(p => p['Name'] === personName);
+        
+        if (person) {
+            container.innerHTML = createPersonHTML(person);
+        } else {
+            // Try fallback data
+            const fallbackPerson = fallbackTeamData.find(p => p['Name'] === personName);
+            if (fallbackPerson) {
+                container.innerHTML = createPersonHTML(fallbackPerson);
+            } else {
+                container.innerHTML = '<p class="error-message">Person not found.</p>';
+            }
+        }
+    } catch (error) {
+        console.log('Could not load person from CSV:', error.message);
+        // Try fallback data
+        const fallbackPerson = fallbackTeamData.find(p => p['Name'] === personName);
+        if (fallbackPerson) {
+            container.innerHTML = createPersonHTML(fallbackPerson);
+        } else {
+            container.innerHTML = '<p class="error-message">Unable to load person data.</p>';
+        }
     }
 }

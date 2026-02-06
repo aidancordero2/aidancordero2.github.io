@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Member | Kinney Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../team.css">
+    <style>
+        .person-page {
+            padding: 6rem 0 3rem 0;
+            background: var(--bg-white);
+        }
+        
+        .person-profile {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .person-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 1.5rem;
+            background: #e5e5e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px var(--shadow);
+            border: 3px solid var(--bg-white);
+            outline: 2px solid var(--border);
+        }
+        
+        .person-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .person-name {
+            font-family: 'Crimson Pro', Georgia, serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 0.5rem;
+        }
+        
+        .person-position {
+            color: #555555;
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .person-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .person-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-medium);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .person-link:hover {
+            background: #000000;
+            color: white;
+            border-color: #000000;
+        }
+        
+        .person-link svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--text-medium);
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            color: #000000;
+        }
+        
+        .photo-placeholder {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .loading-message {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-medium);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">Kinney Lab</a>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/research/" class="nav-link">Research</a></li>
+                <li><a href="/team/" class="nav-link active">People</a></li>
+                <li><a href="/publications/" class="nav-link">Publications</a></li>
+                <li><a href="/contact/" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="person-page">
+            <div class="container">
+                <a href="/team/" class="back-link">← Back to Team</a>
+                <div id="person-container">
+                    <div class="loading-message">Loading...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../script.js"></script>
+</body>
+</html>
