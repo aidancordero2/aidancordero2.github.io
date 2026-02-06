@@ -293,7 +293,7 @@ async function loadTeamMembers() {
     
     // Try to fetch from CSV first (works on deployed site)
     try {
-        const response = await fetch('backend/people.csv');
+        const response = await fetch('/backend/people.csv');
         if (!response.ok) {
             throw new Error('Failed to load CSV');
         }
@@ -469,7 +469,7 @@ async function loadPublications() {
     
     // Try to fetch from CSV first (works on deployed site)
     try {
-        const response = await fetch('backend/scholar_publications.csv');
+        const response = await fetch('/backend/scholar_publications.csv');
         if (!response.ok) {
             throw new Error('Failed to load CSV');
         }
@@ -582,7 +582,7 @@ async function loadAlumni() {
     console.log('Loading alumni...');
     
     try {
-        const response = await fetch('backend/alumni.csv');
+        const response = await fetch('/backend/alumni.csv');
         console.log('Fetch response:', response.status);
         
         if (!response.ok) {
