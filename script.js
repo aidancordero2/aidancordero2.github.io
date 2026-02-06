@@ -84,11 +84,12 @@ const scholarIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="
 
 // Parse CSV text into array of objects
 function parseCSV(csvText) {
-    const lines = csvText.trim().split('\n');
+    // Handle Windows line endings
+    const lines = csvText.replace(/\r/g, '').trim().split('\n');
     if (lines.length < 2) return [];
     
     // Parse header row
-    const headers = lines[0].split(',').map(h => h.trim());
+    const headers = parseCSVLine(lines[0]).map(h => h.trim());
     
     // Parse data rows
     const data = [];
@@ -467,15 +468,21 @@ async function loadPublications() {
     const container = document.getElementById('publications-container');
     if (!container) return;
     
+    console.log('Loading publications...');
+    
     // Try to fetch from CSV first (works on deployed site)
     try {
         const response = await fetch('/backend/scholar_publications.csv');
+        console.log('Publications fetch response:', response.status);
+        
         if (!response.ok) {
             throw new Error('Failed to load CSV');
         }
         
         const csvText = await response.text();
         const publications = parseCSV(csvText);
+        console.log('Parsed publications:', publications.length, 'items');
+        console.log('First publication:', publications[0]);
         
         if (publications.length > 0) {
             renderPublications(publications);
@@ -483,6 +490,7 @@ async function loadPublications() {
         }
     } catch (error) {
         // Fetch failed (likely local file:// access), use fallback
+        console.log('Publications error:', error.message);
         console.log('Using embedded publications data');
     }
     
@@ -492,20 +500,20 @@ async function loadPublications() {
 
 // ===== ALUMNI SECTION DYNAMIC LOADING =====
 
-// Parse alumni CSV data
+// Parse alumni CSV data (uses same logic as parseCSV)
 function parseAlumniCSV(csvText) {
     // Handle Windows line endings and trim
     const lines = csvText.replace(/\r/g, '').trim().split('\n');
     if (lines.length < 2) return [];
     
-    const headers = lines[0].split(',').map(h => h.trim());
+    const headers = parseCSVLine(lines[0]).map(h => h.trim());
     const data = [];
     
     for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue; // Skip empty lines
         
-        const values = line.split(',');
+        const values = parseCSVLine(line);
         const row = {};
         headers.forEach((header, index) => {
             row[header] = values[index] ? values[index].trim() : '';
