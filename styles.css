@@ -32,7 +32,6 @@ body {
     padding: 0 2rem;
 }
 
-/* Navigation - Dark style like Koo Lab */
 .navbar {
     position: fixed;
     top: 0;
@@ -84,29 +83,6 @@ body {
 .nav-link.active {
     color: #000000;
     background: #f5f5f5;
-}
-
-/* Banner Section */
-.banner {
-    margin-top: 60px;
-    padding: 0;
-    width: 100%;
-    overflow: hidden;
-}
-
-.banner-image {
-    width: 100%;
-    background: var(--bg-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.banner-image img {
-    width: 100%;
-    height: auto;
-    max-height: 350px;
-    object-fit: cover;
 }
 
 /* Hero Section */
@@ -334,52 +310,6 @@ section {
 .page-hero p {
     font-size: 1rem;
     opacity: 0.85;
-}
-
-/* Footer */
-.footer {
-    background: var(--primary-dark);
-    color: white;
-    padding: 2.5rem 0 1.5rem;
-    margin-top: 2rem;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-}
-
-.footer-section h4 {
-    font-family: 'Crimson Pro', Georgia, serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-}
-
-.footer-section p {
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.6;
-    font-size: 0.9rem;
-}
-
-.footer-section ul {
-    list-style: none;
-}
-
-.footer-section ul li {
-    margin-bottom: 0.35rem;
-}
-
-.footer-section a {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-
-.footer-section a:hover {
-    color: white;
 }
 
 /* Responsive Design */
