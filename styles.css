@@ -124,8 +124,16 @@ body {
 
 .hero-cta {
     display: flex;
+    flex-wrap: nowrap;
     gap: 1rem;
     justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.hero-cta .btn {
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .hero-about {
