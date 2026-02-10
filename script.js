@@ -163,24 +163,6 @@ function createTeamMemberHTML(member, isPI = false) {
     `;
 }
 
-// Create a section with header and members
-function createSectionHTML(sectionName, members, isPI = false) {
-    if (members.length === 0) return '';
-    
-    const gridClass = isPI ? 'team-grid pi-grid' : 'team-grid members-grid';
-    const membersHTML = members.map(m => createTeamMemberHTML(m, isPI)).join('');
-    
-    return `
-        <div class="section-header">
-            <h2>${sectionName}</h2>
-            <div class="header-line"></div>
-        </div>
-        <div class="${gridClass}">
-            ${membersHTML}
-        </div>
-    `;
-}
-
 // Fallback team data (used when CSV can't be loaded, e.g., local file:// access)
 // UPDATE THIS when you update people.csv to keep them in sync
 const fallbackTeamData = [
@@ -249,28 +231,12 @@ const fallbackTeamData = [
     }
 ];
 
-// Render team members from data array (single grid, no sections)
+// Render team members from data array (single grid, no section headers)
 function renderTeamMembers(people) {
     const container = document.getElementById('team-container');
     if (!container) return;
-    
-    // Keep order: Principal Investigator first, then Postdocs, then Staff
-    const sectionOrder = ['Principal Investigator', 'Postdoctoral Researchers', 'Staff'];
-    const ordered = [];
-    sectionOrder.forEach(section => {
-        people.filter(p => p['Section'] === section).forEach(p => ordered.push(p));
-    });
-    // Include any person not in a known section (e.g. new section in CSV)
-    people.forEach(p => {
-        if (!sectionOrder.includes(p['Section'])) ordered.push(p);
-    });
-    
-    const membersHTML = ordered.map(m => createTeamMemberHTML(m, false)).join('');
-    container.innerHTML = `
-        <div class="team-grid members-grid">
-            ${membersHTML}
-        </div>
-    `;
+    const membersHTML = people.map(m => createTeamMemberHTML(m, false)).join('');
+    container.innerHTML = '<div class="team-grid members-grid">' + membersHTML + '</div>';
 }
 
 // Load and display team members
