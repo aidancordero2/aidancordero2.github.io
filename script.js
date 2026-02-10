@@ -249,49 +249,28 @@ const fallbackTeamData = [
     }
 ];
 
-// Render team members from data array
+// Render team members from data array (single grid, no sections)
 function renderTeamMembers(people) {
     const container = document.getElementById('team-container');
     if (!container) return;
     
-    // Group people by section
-    const sections = {
-        'Principal Investigator': [],
-        'Postdoctoral Researchers': [],
-        'Staff': []
-    };
-    
-    people.forEach(person => {
-        const section = person['Section'];
-        if (sections[section]) {
-            sections[section].push(person);
-        }
+    // Keep order: Principal Investigator first, then Postdocs, then Staff
+    const sectionOrder = ['Principal Investigator', 'Postdoctoral Researchers', 'Staff'];
+    const ordered = [];
+    sectionOrder.forEach(section => {
+        people.filter(p => p['Section'] === section).forEach(p => ordered.push(p));
+    });
+    // Include any person not in a known section (e.g. new section in CSV)
+    people.forEach(p => {
+        if (!sectionOrder.includes(p['Section'])) ordered.push(p);
     });
     
-    // Build HTML for all sections
-    let html = '';
-    
-    // Principal Investigator section
-    if (sections['Principal Investigator'].length > 0) {
-        html += createSectionHTML('Principal Investigator', sections['Principal Investigator'], true);
-    }
-    
-    // Postdoctoral Researchers section
-    if (sections['Postdoctoral Researchers'].length > 0) {
-        html += `<div style="margin-top: 4rem;">`;
-        html += createSectionHTML('Postdoctoral Researchers', sections['Postdoctoral Researchers'], false);
-        html += `</div>`;
-    }
-    
-    // Staff section
-    if (sections['Staff'].length > 0) {
-        html += `<div style="margin-top: 4rem;">`;
-        html += createSectionHTML('Staff', sections['Staff'], false);
-        html += `</div>`;
-    }
-    
-    container.innerHTML = html;
-    
+    const membersHTML = ordered.map(m => createTeamMemberHTML(m, false)).join('');
+    container.innerHTML = `
+        <div class="team-grid members-grid">
+            ${membersHTML}
+        </div>
+    `;
 }
 
 // Load and display team members
