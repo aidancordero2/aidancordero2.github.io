@@ -396,7 +396,6 @@ function formatAuthors(authorsStr) {
     const authors = authorsStr.split(',').map(a => a.trim()).filter(a => a);
     
     return authors.map(author => {
-        // Check if this is Kinney (various formats)
         if (author.toLowerCase().includes('kinney')) {
             return `<strong>${author}</strong>`;
         }
@@ -511,7 +510,7 @@ async function loadPublications() {
 function parseAlumniCSV(csvText) {
     // Handle Windows line endings and trim
     const lines = csvText.replace(/\r/g, '').trim().split('\n');
-    if (lines.length < 2) return [];
+    if (lines.length === 0) return [];
     
     const headers = parseCSVLine(lines[0]).map(h => h.trim());
     const data = [];

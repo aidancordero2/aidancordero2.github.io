@@ -36,9 +36,9 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    background: #ffffff;
+    background: var(--bg-white);
     z-index: 1000;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid var(--border);
 }
 
 .nav-container {
@@ -129,11 +129,15 @@ body {
 }
 
 .hero-about {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    max-width: 900px;
+    max-width: 720px;
     margin: 0 auto;
+}
+
+.hero-about p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-medium);
+    margin-bottom: 1.5rem;
 }
 
 .about-column h3 {
@@ -344,10 +348,6 @@ section {
         white-space: normal;
     }
     
-    .hero-about {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
     
     .hero-cta {
         flex-direction: column;
