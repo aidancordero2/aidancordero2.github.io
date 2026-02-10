@@ -64,6 +64,10 @@
     background: var(--bg-white);
 }
 
+.tools-resources.software-page-top {
+    padding-top: 6rem;
+}
+
 .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
