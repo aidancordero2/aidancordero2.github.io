@@ -184,7 +184,7 @@ const fallbackTeamData = [
         Name: 'John Desmarais',
         Section: 'Postdoctoral Researchers',
         Position: 'Postdoc',
-        Photo: '',
+        Photo: '/pictures/jack_picture.jpg',
         GitHub: '',
         GoogleScholar: '',
         Bio: ''
