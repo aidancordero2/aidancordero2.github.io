@@ -73,6 +73,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('person-container')) {
         loadPerson();
     }
+    
+    // Bold "JB Kinney" in research page author lists
+    document.querySelectorAll('.pub-authors').forEach(el => {
+        el.innerHTML = el.innerHTML.replace(/JB Kinney/g, '<strong>JB Kinney</strong>');
+    });
 });
 
 // ===== TEAM PAGE DYNAMIC LOADING =====
