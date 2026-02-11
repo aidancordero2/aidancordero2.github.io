@@ -169,7 +169,7 @@ const fallbackTeamData = [
     {
         Name: 'Justin Kinney',
         Section: 'Principal Investigator',
-        Position: 'Principal Investigator',
+        Position: 'Professor \n Cancer Center Program Co-Leader',
         Photo: '/pictures/justin_picture.png',
         GitHub: 'https://github.com/jbkinney',
         GoogleScholar: 'https://scholar.google.com/citations?user=lAS1T9BopYMC&hl=en',
