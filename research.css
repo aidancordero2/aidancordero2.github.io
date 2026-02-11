@@ -118,7 +118,7 @@
         margin-left: 0;
         width: 100%;
         max-width: 100%;
-        aspect-ratio: 16/10;
+        aspect-ratio: auto;
     }
 }
 
