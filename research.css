@@ -55,8 +55,10 @@
     border-bottom: none;
 }
 
-.pub-highlight.pub-highlight-no-figure {
-    grid-template-columns: 1fr;
+.pub-figure-empty {
+    min-height: 0;
+    aspect-ratio: auto;
+    background: transparent;
 }
 
 .pub-figure {
@@ -124,6 +126,9 @@
         width: 100%;
         max-width: 100%;
         aspect-ratio: auto;
+    }
+    .pub-figure-empty {
+        display: none;
     }
 }
 

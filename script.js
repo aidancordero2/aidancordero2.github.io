@@ -309,22 +309,43 @@ async function loadTeamMembers() {
 
 // ===== RESEARCH HIGHLIGHTS (SELECTED PUBLICATIONS) =====
 
+// Fix UTF-8 mojibake (when UTF-8 was misinterpreted as Latin-1)
+function fixMojibake(str) {
+    if (!str) return '';
+    return str
+        .replace(/Ã­/g, 'í')
+        .replace(/Ã³/g, 'ó')
+        .replace(/Ã©/g, 'é')
+        .replace(/Ã¡/g, 'á')
+        .replace(/Ãº/g, 'ú')
+        .replace(/Ã±/g, 'ñ')
+        .replace(/Ã¶/g, 'ö')
+        .replace(/Ã¼/g, 'ü')
+        .replace(/Ã¤/g, 'ä')
+        .replace(/â/g, "'")
+        .replace(/â/g, '–')
+        .replace(/â/g, '—')
+        .replace(/â¦/g, '…')
+        .replace(/Ï/g, 'σ')
+        .replace(/Â /g, ' ');
+}
+
 function createSelectedPubHTML(row) {
-    const title = (row['Title'] || '').trim();
-    const authors = (row['Authors'] || '').trim();
-    const journal = (row['Journal'] || '').trim();
-    const year = (row['Year'] || '').trim();
-    const link = (row['Link'] || '').trim();
-    const figure = (row['Figure'] || '').trim();
-    const description = (row['Description'] || '').trim();
+    const raw = (key) => (row[key] || '').trim();
+    const title = fixMojibake(raw('Title'));
+    const authors = fixMojibake(raw('Authors'));
+    const journal = fixMojibake(raw('Journal'));
+    const year = fixMojibake(raw('Year'));
+    const link = raw('Link');
+    const figure = raw('Figure');
+    const description = fixMojibake(raw('Description'));
     
     if (!title) return '';
     
     const figureSrc = figure ? normalizePath(figure) : '';
     const figureHTML = figureSrc
-        ? `<div class="pub-figure"><img src="${figureSrc}" alt="Figure from publication"></div>`
-        : '';
-    const noFigureClass = figureSrc ? '' : ' pub-highlight-no-figure';
+        ? `<div class="pub-figure"><img src="${escapeHtml(figureSrc)}" alt="Figure from publication"></div>`
+        : '<div class="pub-figure pub-figure-empty"></div>';
     
     const metaHTML = (authors || journal || year)
         ? `<p class="pub-meta"><span class="pub-authors">${escapeHtml(authors)}</span>${authors && (journal || year) ? ' · ' : ''}${journal ? `<span class="pub-journal">${escapeHtml(journal)}</span>` : ''}${year ? ` (${escapeHtml(year)})` : ''}</p>`
@@ -335,7 +356,7 @@ function createSelectedPubHTML(row) {
     const linkHTML = link ? `<p class="pub-links"><a href="${escapeHtml(link)}" class="tool-link" target="_blank">Paper</a></p>` : '';
     
     return `
-        <article class="pub-highlight${noFigureClass}">
+        <article class="pub-highlight">
             ${figureHTML}
             <div class="pub-body">
                 <h3 class="pub-title">${escapeHtml(title)}</h3>
