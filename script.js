@@ -392,12 +392,34 @@ async function loadSelectedPublications() {
     const container = document.getElementById('selected-publications-container');
     if (!container) return;
     
-    try {
+    async function tryXlsx() {
+        if (typeof XLSX === 'undefined') return null;
+        const response = await fetch('/backend/selected_publications.xlsx');
+        if (!response.ok) return null;
+        const arrayBuffer = await response.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rawRows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+        return rawRows.map(row => {
+            const normalized = {};
+            for (const [key, value] of Object.entries(row)) {
+                const k = (key || '').trim();
+                normalized[k] = value != null ? String(value).trim() : '';
+            }
+            return normalized;
+        });
+    }
+    async function tryCsv() {
         const response = await fetch('/backend/selected_publications.csv');
         if (!response.ok) throw new Error('Failed to load selected publications');
         const text = await response.text();
-        const rows = parseTSV(text);
-        if (rows.length > 0) {
+        return parseTSV(text);
+    }
+    try {
+        let rows = await tryXlsx();
+        if (!rows || rows.length === 0) rows = await tryCsv();
+        if (rows && rows.length > 0) {
             renderSelectedPublications(rows);
         } else {
             container.innerHTML = '<p class="loading-message">No selected publications found.</p>';
