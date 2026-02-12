@@ -32,69 +32,8 @@
                     <h2>Selected Publications</h2>
                     <div class="header-line"></div>
                 </div>
-                <div class="selected-publications">
-                    <article class="pub-highlight">
-                        <div class="pub-figure">
-                            <img src="/pictures/placeholder_figure.png" alt="Figure from publication">
-                        </div>
-                        <div class="pub-body">
-                            <h3 class="pub-title">Algebraic and Diagrammatic Methods for the Rule-Based Modeling of Multiparticle Complexes</h3>
-                            <p class="pub-meta"><span class="pub-authors">Rebecca J Rousseau, Justin B Kinney</span> · <span class="pub-journal">PRX Life 3</span> (2025)</p>
-                            <p class="pub-description">This paper introduces an operator algebra framework that bridges two previously disconnected approaches to modeling multiparticle complexes in stochastic chemical systems: the statistical physics formalism (rooted in Doi's 1976 Fock space approach) and rule-based computational methods developed for simulating biochemical complexes. The new formalism extends Fock space to support not just particle creation and annihilation but also the assembly and disassembly of multiparticle complexes, with rules specified by algebraic operators via Wick's theorem and aided by diagrammatic tools. The result is a unified mathematical and computational framework applicable to both equilibrium and nonequilibrium systems, including a stochastic simulation algorithm for the latter.</p>
-                            <p class="pub-links"><a href="https://journals.aps.org/prxlife/abstract/10.1103/PRXLife.3.023004" class="tool-link">Paper</a> </p>
-                        </div>
-                    </article>
-
-
-                    <article class="pub-highlight">
-                        <div class="pub-figure">
-                            <img src="/pictures/figures/fig1_gaugefixing_posfai_et_al.png" alt="Figure from publication">
-                        </div>   
-                        <div class="pub-body">
-                            <h3 class="pub-title">Gauge fixing for sequence-function relationships</h3>
-                            <p class="pub-meta"><span class="pub-authors">Anna Posfai, Juannan Zhou, David M McCandlish, Justin B Kinney</span> · <span class="pub-journal">PRX Life 3</span> (2025)</p>
-                            <p class="pub-description">Quantitative models of sequence-function relationships in computational biology often have "gauge freedoms" — parameter degeneracies where values can change without affecting predictions — which must be resolved through "gauge-fixing" before model parameters can be meaningfully interpreted. Here, we derive an analytically tractable family of gauges applicable to a broad class of sequence-function models, including additive, pairwise, and higher-order interaction models, unifying many commonly used gauges as special cases. We demonstrate that different gauge choices can be leveraged both to explore complex activity landscapes and to identify simplified, locally valid models, providing practical strategies for interpreting sequence-function relationships.</p>
-                            <p class="pub-links"><a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012818" class="tool-link">Paper</a> </p>
-                        </div>
-                    </article
-                    >
-
-                    <article class="pub-highlight">
-                        <div class="pub-figure">
-                            <img src="/pictures/figures/fig1_seitz_2024.png" alt="Figure from publication">
-                        </div>
-                        <div class="pub-body">
-                            <h3 class="pub-title">Interpreting cis-regulatory mechanisms from genomic deep neural networks using surrogate models</h3>
-                            <p class="pub-meta"><span class="pub-authors">Evan E Seitz, David M McCandlish, Justin B Kinney, Peter K Koo</span> · <span class="pub-journal">Nature machine intelligence 6 (6), 701-713 (2024)</span> </p>
-                            <p class="pub-description"></p>
-                            <p class="pub-links"><a href="https://www.nature.com/articles/s42256-024-00851-5" class="tool-link">Paper</a></p>
-                        </div>
-                    </article>
-
-                    <article class="pub-highlight">
-                        <div class="pub-figure">
-                            <img src="/pictures/figures/fig1_ishigami_2024.png" alt="Figure from publication">
-                        </div>
-                        <div class="pub-body">
-                            <h3 class="pub-title">Specificity, synergy, and mechanisms of splice-modifying drugs</h3>
-                            <p class="pub-meta"><span class="pub-authors">Yuma Ishigami, Mandy S Wong, Carlos Mart Gómez, Andalus Ayaz, Mahdi Kooshkbaghi, Sonya M Hanson, David M McCandlish, Adrian R Krainer, Justin B Kinney</span> · <span class="pub-journal">Nature Communications 15 (1), 1880 (2024)</span> </p>
-                            <p class="pub-description">Here, we introduce mechanistically interpretable quantitative models for how splice-modifying drugs work, combining massively parallel splicing assays, RNA-seq, and dose-response curves to characterize two SMA drugs, risdiplam and branaplam. The results reveal the sequence specificities of both drugs, suggest branaplam operates via two distinct interaction modes at 5' splice sites, and challenge the prevailing two-site hypothesis for risdiplam's activity at SMN2 exon 7. More broadly, the study finds that anomalous cooperativity and multi-drug synergy are widespread among exon-inclusion-promoting drugs, offering both mechanistic clarity on existing treatments and a framework for rational drug development.</p>
-                            <p class="pub-links"><a href="https://www.nature.com/articles/s41467-024-46090-5" class="tool-link">Paper</a></p>
-                        </div>
-                    </article>
-
-
-                    <article class="pub-highlight">
-                        <div class="pub-figure">
-                            <img src="/pictures/figures/fig1_deeplearning_kinney2010.jpeg" alt="Figure from publication">
-                        </div>
-                        <div class="pub-body">
-                            <h3 class="pub-title">Using deep sequencing to characterize the biophysical mechanism of a transcriptional regulatory sequence</h3>
-                            <p class="pub-meta"><span class="pub-authors">JB Kinney, A Murugan, CG Callan, EC Cox</span> · <span class="pub-journal">Proceedings of the National Academy of Sciences</span> (2010)</p>
-                            <p class="pub-description">This paper presents a method for quantitatively characterizing the protein-DNA and protein-protein interactions that regulate transcription in living cells, using a library of partially mutated regulatory sequences sorted by transcriptional activity and sequenced in bulk. Computational analysis of the resulting data — enabled by a relationship between likelihood and mutual information — can extract precise biophysical parameters even in the presence of experimental noise. Applied to the E. coli lac promoter, the approach successfully identified binding sites, determined sequence-dependent binding energies, and measured in vivo interaction energies between RNA polymerase and transcription factors.</p>
-                            <p class="pub-links"><a href="https://www.pnas.org/doi/10.1073/pnas.1004290107" class="tool-link">Paper</a></p>
-                        </div>
-                    </article>
+                <div class="selected-publications" id="selected-publications-container">
+                    <p class="loading-message">Loading selected publications...</p>
                 </div>
             </div>
         </section>

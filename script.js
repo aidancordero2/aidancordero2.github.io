@@ -45,7 +45,7 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe elements with fade-in class
 document.addEventListener('DOMContentLoaded', () => {
-    const fadeElements = document.querySelectorAll('.about-card, .research-item, .news-item, .team-card, .research-area-card, .tool-card, .opportunity-card');
+    const fadeElements = document.querySelectorAll('.about-card, .research-item, .news-item, .team-card, .research-area-card, .tool-card, .opportunity-card, .pub-highlight');
     
     fadeElements.forEach(el => {
         el.style.opacity = '0';
@@ -74,7 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
         loadPerson();
     }
     
-    // Bold "JB Kinney" in research page author lists
+    // Load selected publications (research highlights) if on research page
+    if (document.getElementById('selected-publications-container')) {
+        loadSelectedPublications();
+    }
+    
+    // Bold "JB Kinney" in research page author lists (for any already in DOM)
     document.querySelectorAll('.pub-authors').forEach(el => {
         el.innerHTML = el.innerHTML.replace(/JB Kinney/g, '<strong>JB Kinney</strong>');
     });
@@ -114,6 +119,11 @@ function parseCSV(csvText) {
 
 // Parse a single CSV line (handles commas in quoted fields)
 function parseCSVLine(line) {
+    return parseDelimitedLine(line, ',');
+}
+
+// Parse a single line with given delimiter (handles quoted fields)
+function parseDelimitedLine(line, delimiter) {
     const result = [];
     let current = '';
     let inQuotes = false;
@@ -123,7 +133,7 @@ function parseCSVLine(line) {
         
         if (char === '"') {
             inQuotes = !inQuotes;
-        } else if (char === ',' && !inQuotes) {
+        } else if (char === delimiter && !inQuotes) {
             result.push(current);
             current = '';
         } else {
@@ -132,6 +142,31 @@ function parseCSVLine(line) {
     }
     result.push(current);
     return result;
+}
+
+// Parse TSV (tab-delimited) text into array of objects
+function parseTSV(tsvText) {
+    const lines = tsvText.replace(/\r/g, '').trim().split('\n');
+    if (lines.length < 2) return [];
+    
+    const headers = parseDelimitedLine(lines[0], '\t').map(h => h.trim());
+    const data = [];
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        
+        const values = parseDelimitedLine(lines[i], '\t');
+        const row = {};
+        headers.forEach((header, index) => {
+            let val = values[index] ? values[index].trim() : '';
+            if (val.startsWith('"') && val.endsWith('"')) {
+                val = val.slice(1, -1).replace(/""/g, '"');
+            }
+            row[header] = val;
+        });
+        data.push(row);
+    }
+    return data;
 }
 
 // Normalize path to be absolute
@@ -270,6 +305,86 @@ async function loadTeamMembers() {
     
     // Fall back to embedded data
     renderTeamMembers(fallbackTeamData);
+}
+
+// ===== RESEARCH HIGHLIGHTS (SELECTED PUBLICATIONS) =====
+
+function createSelectedPubHTML(row) {
+    const title = (row['Title'] || '').trim();
+    const authors = (row['Authors'] || '').trim();
+    const journal = (row['Journal'] || '').trim();
+    const year = (row['Year'] || '').trim();
+    const link = (row['Link'] || '').trim();
+    const figure = (row['Figure'] || '').trim();
+    const description = (row['Description'] || '').trim();
+    
+    if (!title) return '';
+    
+    const figureSrc = figure ? normalizePath(figure) : '';
+    const figureHTML = figureSrc
+        ? `<div class="pub-figure"><img src="${figureSrc}" alt="Figure from publication"></div>`
+        : '';
+    const noFigureClass = figureSrc ? '' : ' pub-highlight-no-figure';
+    
+    const metaHTML = (authors || journal || year)
+        ? `<p class="pub-meta"><span class="pub-authors">${escapeHtml(authors)}</span>${authors && (journal || year) ? ' · ' : ''}${journal ? `<span class="pub-journal">${escapeHtml(journal)}</span>` : ''}${year ? ` (${escapeHtml(year)})` : ''}</p>`
+        : '';
+    
+    const descHTML = description ? `<p class="pub-description">${escapeHtml(description)}</p>` : '';
+    
+    const linkHTML = link ? `<p class="pub-links"><a href="${escapeHtml(link)}" class="tool-link" target="_blank">Paper</a></p>` : '';
+    
+    return `
+        <article class="pub-highlight${noFigureClass}">
+            ${figureHTML}
+            <div class="pub-body">
+                <h3 class="pub-title">${escapeHtml(title)}</h3>
+                ${metaHTML}
+                ${descHTML}
+                ${linkHTML}
+            </div>
+        </article>
+    `;
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function renderSelectedPublications(rows) {
+    const container = document.getElementById('selected-publications-container');
+    if (!container) return;
+    
+    const filtered = rows.filter(r => (r['Title'] || '').trim());
+    const html = filtered.map(r => createSelectedPubHTML(r)).join('');
+    container.innerHTML = html || '<p class="loading-message">No selected publications found.</p>';
+    
+    document.querySelectorAll('.pub-authors').forEach(el => {
+        el.innerHTML = el.innerHTML.replace(/JB Kinney/g, '<strong>JB Kinney</strong>');
+    });
+}
+
+async function loadSelectedPublications() {
+    const container = document.getElementById('selected-publications-container');
+    if (!container) return;
+    
+    try {
+        const response = await fetch('/backend/selected_publications.csv');
+        if (!response.ok) throw new Error('Failed to load selected publications');
+        const text = await response.text();
+        const rows = parseTSV(text);
+        if (rows.length > 0) {
+            renderSelectedPublications(rows);
+        } else {
+            container.innerHTML = '<p class="loading-message">No selected publications found.</p>';
+        }
+    } catch (err) {
+        console.warn('Selected publications load failed:', err);
+        container.innerHTML = '<p class="error-message">Could not load selected publications.</p>';
+    }
 }
 
 // ===== PUBLICATIONS PAGE DYNAMIC LOADING =====
