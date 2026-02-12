@@ -12,22 +12,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Add scroll effect to navbar
-let lastScroll = 0;
-const navbar = document.querySelector('.navbar');
-
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 100) {
-        navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-    } else {
-        navbar.style.boxShadow = 'none';
-    }
-    
-    lastScroll = currentScroll;
-});
-
 // Add animation on scroll for elements
 const observerOptions = {
     threshold: 0.1,
@@ -82,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Bold "JB Kinney" in research page author lists (for any already in DOM)
     document.querySelectorAll('.pub-authors').forEach(el => {
         el.innerHTML = el.innerHTML.replace(/JB Kinney/g, '<strong>JB Kinney</strong>');
+        el.innerHTML = el.innerHTML.replace(/Justin B Kinney/g, '<strong>Justin B Kinney</strong>');
     });
 });
 
@@ -144,31 +129,6 @@ function parseDelimitedLine(line, delimiter) {
     return result;
 }
 
-// Parse TSV (tab-delimited) text into array of objects
-function parseTSV(tsvText) {
-    const lines = tsvText.replace(/\r/g, '').trim().split('\n');
-    if (lines.length < 2) return [];
-    
-    const headers = parseDelimitedLine(lines[0], '\t').map(h => h.trim());
-    const data = [];
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (!line) continue;
-        
-        const values = parseDelimitedLine(lines[i], '\t');
-        const row = {};
-        headers.forEach((header, index) => {
-            let val = values[index] ? values[index].trim() : '';
-            if (val.startsWith('"') && val.endsWith('"')) {
-                val = val.slice(1, -1).replace(/""/g, '"');
-            }
-            row[header] = val;
-        });
-        data.push(row);
-    }
-    return data;
-}
-
 // Normalize path to be absolute
 function normalizePath(path) {
     if (!path) return '';
@@ -177,7 +137,7 @@ function normalizePath(path) {
 }
 
 // Create HTML for a team member
-function createTeamMemberHTML(member, isPI = false) {
+function createTeamMemberHTML(member) {
     const name = member['Name'] || '';
     const position = member['Position'] || '';
     const photo = normalizePath(member['Photo'] || '');
@@ -203,74 +163,6 @@ function createTeamMemberHTML(member, isPI = false) {
     `;
 }
 
-// Fallback team data (used when CSV can't be loaded, e.g., local file:// access)
-// UPDATE THIS when you update people.csv to keep them in sync
-const fallbackTeamData = [
-    {
-        Name: 'Justin Kinney',
-        Section: 'Principal Investigator',
-        Position: 'Professor \n Cancer Center Program Co-Leader',
-        Photo: '/pictures/justin_picture.png',
-        GitHub: 'https://github.com/jbkinney',
-        GoogleScholar: 'https://scholar.google.com/citations?user=lAS1T9BopYMC&hl=en',
-        Bio: ''
-    },
-    {
-        Name: 'John Desmarais',
-        Section: 'Postdoctoral Researchers',
-        Position: 'Postdoc',
-        Photo: '/pictures/jack_picture.jpg',
-        GitHub: '',
-        GoogleScholar: '',
-        Bio: ''
-    },
-    {
-        Name: 'Zhihan Liu',
-        Section: 'Postdoctoral Researchers',
-        Position: 'Postdoc',
-        Photo: '',
-        GitHub: 'https://github.com/Zhihan-Leo-Liu',
-        GoogleScholar: '',
-        Bio: ''
-    },
-    {
-        Name: 'Kaiser Loell',
-        Section: 'Postdoctoral Researchers',
-        Position: 'Postdoc',
-        Photo: '',
-        GitHub: '',
-        GoogleScholar: '',
-        Bio: ''
-    },
-    {
-        Name: 'Deborah Tenenbaum',
-        Section: 'Postdoctoral Researchers',
-        Position: 'Postdoc',
-        Photo: '',
-        GitHub: '',
-        GoogleScholar: '',
-        Bio: ''
-    },
-    {
-        Name: 'Andalus Ayaz',
-        Section: 'Staff',
-        Position: 'Research Technician',
-        Photo: '/pictures/andalus_picture.png',
-        GitHub: '',
-        GoogleScholar: '',
-        Bio: ''
-    },
-    {
-        Name: 'Aidan Cordero',
-        Section: 'Staff',
-        Position: 'Computational Science Developer',
-        Photo: '/pictures/aidan_picture.png',
-        GitHub: 'https://github.com/aidancordero2',
-        GoogleScholar: 'https://scholar.google.com/citations?hl=en&user=No7MvSYAAAAJ',
-        Bio: 'Aidan is a Computational Science Developer in the Kinney Lab.'
-    }
-];
-
 // Render team members from data array (single grid, no section headers)
 function renderTeamMembers(people) {
     const container = document.getElementById('team-container');
@@ -284,61 +176,34 @@ async function loadTeamMembers() {
     const container = document.getElementById('team-container');
     if (!container) return;
     
-    // Try to fetch from CSV first (works on deployed site)
-    try {
-        const response = await fetch('/backend/people.csv');
-        if (!response.ok) {
-            throw new Error('Failed to load CSV');
-        }
-        
-        const csvText = await response.text();
-        const people = parseCSV(csvText);
-        
-        if (people.length > 0) {
-            renderTeamMembers(people);
-            return;
-        }
-    } catch (error) {
-        // Fetch failed (likely local file:// access), use fallback
-        console.log('Using embedded team data');
+    
+    
+    const response = await fetch('/backend/people.csv');
+    if (!response.ok) {
+        throw new Error('Failed to load CSV');
     }
     
-    // Fall back to embedded data
-    renderTeamMembers(fallbackTeamData);
-}
+    const csvText = await response.text();
+    const people = parseCSV(csvText);
+    
+    if (people.length > 0) {
+        renderTeamMembers(people);
+        return;
+    }
+} 
+
 
 // ===== RESEARCH HIGHLIGHTS (SELECTED PUBLICATIONS) =====
 
-// Fix UTF-8 mojibake (when UTF-8 was misinterpreted as Latin-1)
-function fixMojibake(str) {
-    if (!str) return '';
-    return str
-        .replace(/Ã­/g, 'í')
-        .replace(/Ã³/g, 'ó')
-        .replace(/Ã©/g, 'é')
-        .replace(/Ã¡/g, 'á')
-        .replace(/Ãº/g, 'ú')
-        .replace(/Ã±/g, 'ñ')
-        .replace(/Ã¶/g, 'ö')
-        .replace(/Ã¼/g, 'ü')
-        .replace(/Ã¤/g, 'ä')
-        .replace(/â/g, "'")
-        .replace(/â/g, '–')
-        .replace(/â/g, '—')
-        .replace(/â¦/g, '…')
-        .replace(/Ï/g, 'σ')
-        .replace(/Â /g, ' ');
-}
-
 function createSelectedPubHTML(row) {
     const raw = (key) => (row[key] || '').trim();
-    const title = fixMojibake(raw('Title'));
-    const authors = fixMojibake(raw('Authors'));
-    const journal = fixMojibake(raw('Journal'));
-    const year = fixMojibake(raw('Year'));
+    const title = raw('Title');
+    const authors = raw('Authors');
+    const journal = raw('Journal');
+    const year = raw('Year');
     const link = raw('Link');
     const figure = raw('Figure');
-    const description = fixMojibake(raw('Description'));
+    const description = raw('Description');
     
     if (!title) return '';
     
@@ -446,69 +311,6 @@ async function loadSelectedPublications() {
 
 // ===== PUBLICATIONS PAGE DYNAMIC LOADING =====
 
-// Fallback publications data (from scholar_publications.csv)
-// Uses paper, preprint, and code columns
-const fallbackPublicationsData = [
-    { title: "A developmental timer coordinates organism-wide microRNA transcription", authors: "P Wu, J Wang, B Pryor, I Valentino, DF Ritter, K Loel, J Kinney, S Ercan, ...", venue: "bioRxiv, 2026.01. 21.700890, 2026", year: "2026", paper: "", preprint: "https://www.biorxiv.org/content/10.64898/2026.01.21.700890v1.full", code: "" },
-    { title: "Gauge fixing for sequence-function relationships", authors: "A Posfai, J Zhou, DM McCandlish, JB Kinney", venue: "PLoS Computational Biology 21 (3), e1012818, 2025", year: "2025", paper: "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012818", preprint: "", code: "" },
-    { title: "Inference and visualization of complex genotype-phenotype maps with gpmap-tools", authors: "C Martí-Gómez, J Zhou, WC Chen, A Stoltzfus, JB Kinney, ...", venue: "bioRxiv, 2025", year: "2025", paper: "", preprint: "https://www.biorxiv.org/content/10.1101/2025.03.09.642267v3", code: "" },
-    { title: "Symmetry, gauge freedoms, and the interpretability of sequence-function relationships", authors: "A Posfai, DM McCandlish, JB Kinney", venue: "Physical Review Research 7 (2), 023005, 2025", year: "2025", paper: "https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.7.023005", preprint: "", code: "" },
-    { title: "On learning functions over biological sequence space: relating Gaussian process priors, regularization, and gauge fixing", authors: "S Petti, C Martí-Gómez, JB Kinney, J Zhou, DM McCandlish", venue: "arXiv preprint arXiv:2504.19034, 2025", year: "2025", paper: "", preprint: "https://arxiv.org/abs/2504.19034", code: "" },
-    { title: "Uncovering the mechanistic landscape of regulatory DNA with deep learning", authors: "EE Seitz, DM McCandlish, JB Kinney, PK Koo", venue: "bioRxiv, 2025.10. 07.681052, 2025", year: "2025", paper: "", preprint: "https://www.biorxiv.org/content/10.1101/2025.10.07.681052v1.full", code: "https://github.com/evanseitz/seam-nn" },
-    { title: "Algebraic and Diagrammatic Methods for the Rule-Based Modeling of Multiparticle Complexes", authors: "RJ Rousseau, JB Kinney", venue: "PRX Life 3 (2), 023004, 2025", year: "2025", paper: "https://journals.aps.org/prxlife/abstract/10.1103/PRXLife.3.023004", preprint: "", code: "" },
-    { title: "GaugeFixer: overcoming parameter non-identifiability in models of sequence-function relationships", authors: "C Martí-Gómez, DM McCandlish, JB Kinney", venue: "bioRxiv, 2025.12. 08.693054, 2025", year: "2025", paper: "", preprint: "https://www.biorxiv.org/content/10.64898/2025.12.08.693054v1", code: "https://github.com/jbkinney/gaugefixer" },
-    { title: "Structural basis of DNA-dependent coactivator recruitment by the tuft cell master regulator POU2F3", authors: "A Alpsoy, JJ Ipsaro, D Skopelitis, S Pal, FS Chung, S Carpenter, ...", venue: "Cell reports 44 (11), 2025", year: "2025", paper: "", preprint: "", code: "" },
-    { title: "HENMT1 restricts endogenous retrovirus activity by methylation of 3'-tRNA fragments", authors: "JI Steinberg, H Sertznig, JJ Desmarais, J Wilken, D Rubio, M Peacey, ...", venue: "bioRxiv, 2025.05. 12.650695, 2025", year: "2025", paper: "", preprint: "", code: "" },
-    { title: "Specificity, synergy, and mechanisms of splice-modifying drugs", authors: "Y Ishigami, MS Wong, C Martí-Gómez, A Ayaz, M Kooshkbaghi, ...", venue: "Nature Communications 15 (1), 1880, 2024", year: "2024", paper: "", preprint: "", code: "" },
-    { title: "Interpreting cis-regulatory mechanisms from genomic deep neural networks using surrogate models", authors: "EE Seitz, DM McCandlish, JB Kinney, PK Koo", venue: "Nature machine intelligence 6 (6), 701-713, 2024", year: "2024", paper: "", preprint: "", code: "" },
-    { title: "MAVE-NN: learning genotype-phenotype maps from multiplex assays of variant effect", authors: "A Tareen, M Kooshkbaghi, A Posfai, WT Ireland, DM McCandlish, ...", venue: "Genome biology 23 (1), 98, 2022", year: "2022", paper: "", preprint: "", code: "https://github.com/jbkinney/mavenn" },
-    { title: "Higher-order epistasis and phenotypic prediction", authors: "J Zhou, MS Wong, WC Chen, AR Krainer, JB Kinney, DM McCandlish", venue: "Proceedings of the National Academy of Sciences 119 (39), e2204233119, 2022", year: "2022", paper: "", preprint: "", code: "" },
-    { title: "Structural and mechanistic basis of σ-dependent transcriptional pausing", authors: "C Pukhrambam, V Molodtsov, M Kooshkbaghi, A Tareen, H Vu, ...", venue: "Proceedings of the National Academy of Sciences 119 (23), e2201301119, 2022", year: "2022", paper: "", preprint: "", code: "" },
-    { title: "Promoter-sequence determinants and structural basis of primer-dependent transcription initiation in Escherichia coli", authors: "KS Skalenko, L Li, Y Zhang, IO Vvedenskaya, JT Winkelman, AL Cope, ...", venue: "Proceedings of the National Academy of Sciences 118 (27), e2106388118, 2021", year: "2021", paper: "", preprint: "", code: "" },
-    { title: "Field-theoretic density estimation for biological sequence space with applications to 5′ splice site diversity and aneuploidy in cancer", authors: "WC Chen, J Zhou, JM Sheltzer, JB Kinney, DM McCandlish", venue: "Proceedings of the National Academy of Sciences 118 (40), e2025782118, 2021", year: "2021", paper: "", preprint: "", code: "" },
-    { title: "Logomaker: beautiful sequence logos in Python", authors: "A Tareen, JB Kinney", venue: "Bioinformatics 36 (7), 2272-2274, 2020", year: "2020", paper: "", preprint: "", code: "https://github.com/jbkinney/logomaker" },
-    { title: "Deciphering the regulatory genome of Escherichia coli, one hundred promoters at a time", authors: "WT Ireland, SM Beeler, E Flores-Bautista, NS McCarty, T Röschinger, ...", venue: "Elife 9, e55308, 2020", year: "2020", paper: "", preprint: "", code: "" },
-    { title: "Evolution of DNA replication origin specification and gene silencing mechanisms", authors: "Y Hu, A Tareen, YJ Sheu, WT Ireland, C Speck, H Li, L Joshua-Tor, ...", venue: "Nature communications 11 (1), 5175, 2020", year: "2020", paper: "", preprint: "", code: "" },
-    { title: "Non-parametric Bayesian density estimation for biological sequence space with applications to pre-mRNA splicing and the karyotypic diversity of human cancer", authors: "WC Chen, J Zhou, JM Sheltzer, JB Kinney, DM McCandlish", venue: "BioRxiv, 2020.11. 25.399253, 2020", year: "2020", paper: "", preprint: "", code: "" },
-    { title: "Empirical variance component regression for sequence-function relationships", authors: "J Zhou, M Wong, WC Chen, A Krainer, J Kinney, D McCandlish", venue: "BioRxiv, 2020", year: "2020", paper: "", preprint: "", code: "" },
-    { title: "Massively parallel assays and quantitative sequence–function relationships", authors: "JB Kinney, DM McCandlish", venue: "Annual review of genomics and human genetics 20 (1), 99-127, 2019", year: "2019", paper: "", preprint: "", code: "" },
-    { title: "Mapping DNA sequence to transcription factor binding energy in vivo", authors: "SL Barnes, NM Belliveau, WT Ireland, JB Kinney, R Phillips", venue: "PLoS computational biology 15 (2), e1006226, 2019", year: "2019", paper: "", preprint: "", code: "" },
-    { title: "Epistasis in a fitness landscape defined by antibody-antigen binding free energy", authors: "RM Adams, JB Kinney, AM Walczak, T Mora", venue: "Cell systems 8 (1), 86-93. e3, 2019", year: "2019", paper: "", preprint: "", code: "" },
-    { title: "Biophysical models of cis-regulation as interpretable neural networks", authors: "A Tareen, JB Kinney", venue: "arXiv preprint arXiv:2001.03560, 2019", year: "2019", paper: "", preprint: "", code: "" },
-    { title: "Quantitative Activity Profile and Context Dependence of All Human 5′ Splice Sites", authors: "MS Wong, JB Kinney, AR Krainer", venue: "Molecular cell 71 (6), 1012-1026.e3, 2018", year: "2018", paper: "", preprint: "", code: "" },
-    { title: "Systematic approach for dissecting the molecular mechanisms of transcriptional regulation in bacteria", authors: "NM Belliveau, SL Barnes, WT Ireland, DL Jones, MJ Sweredoski, ...", venue: "Proceedings of the National Academy of Sciences 115 (21), E4796-E4805, 2018", year: "2018", paper: "", preprint: "", code: "" },
-    { title: "A transcription factor addiction in leukemia imposed by the MLL promoter sequence", authors: "B Lu, O Klingbeil, Y Tarumoto, TDD Somerville, YH Huang, Y Wei, ...", venue: "Cancer Cell 34 (6), 970-981. e8, 2018", year: "2018", paper: "", preprint: "", code: "" },
-    { title: "Density estimation on small data sets", authors: "WC Chen, A Tareen, JB Kinney", venue: "Physical review letters 121 (16), 160605, 2018", year: "2018", paper: "", preprint: "", code: "" },
-    { title: "Measuring cis-regulatory energetics in living cells using allelic manifolds", authors: "TL Forcier, A Ayaz, MS Gill, D Jones, R Phillips, JB Kinney", venue: "Elife 7, e40618, 2018", year: "2018", paper: "", preprint: "", code: "" },
-    { title: "Selection for protein stability enriches for epistatic interactions", authors: "A Posfai, J Zhou, JB Plotkin, JB Kinney, DM McCandlish", venue: "Genes 9 (9), 423, 2018", year: "2018", paper: "", preprint: "", code: "" },
-    { title: "Precision measurements of regulatory energetics in living cells", authors: "T Forcier, A Ayaz, M Gill, JB Kinney", venue: "bioRxiv, 2018", year: "2018", paper: "", preprint: "", code: "" },
-    { title: "Inducible CRISPR-based Genome Editing for the Characterization of Cancer Genes", authors: "N Sachan, M Miller, NH Shirole, S Senturk, V Corbo, JB Kinney, ...", venue: "Genome Editing and Engineering: From TALENs, ZFNs and CRISPRs to Molecular …, 2018", year: "2018", paper: "", preprint: "", code: "" },
-    { title: "Rapid and tunable method to temporally control gene editing based on conditional Cas9 stabilization", authors: "S Senturk, NH Shirole, DG Nowak, V Corbo, D Pal, A Vaughan, ...", venue: "Nature Communications 8, 14370, 2017", year: "2017", paper: "", preprint: "", code: "" },
-    { title: "Rapid generation of drug-resistance alleles at endogenous loci using CRISPR-Cas9 indel mutagenesis", authors: "JJ Ipsaro, C Shen, A Eri, Y Xu, JB Kinney, L Joshua-Tor, CR Vakoc, J Shi", venue: "PLoS One 12 (2), e0172177, 2017", year: "2017", paper: "", preprint: "", code: "" },
-    { title: "Measuring the sequence-affinity landscape of antibodies with massively parallel titration curves", authors: "RM Adams, T Mora, AM Walczak, JB Kinney", venue: "Elife 5, e23156, 2016", year: "2016", paper: "", preprint: "", code: "" },
-    { title: "Concerted activities of Mcm4, Sld3, and Dbf4 in control of origin activation and DNA replication fork progression", authors: "YJ Sheu, JB Kinney, B Stillman", venue: "Genome research 26 (3), 315-330, 2016", year: "2016", paper: "", preprint: "", code: "" },
-    { title: "MPAthic: quantitative modeling of sequence-function relationships for massively parallel assays.", authors: "WT Ireland, JB Kinney", venue: "Preprint at http://biorxiv. org/content/early/2016/05/21/054676, 2016", year: "2016", paper: "", preprint: "", code: "" },
-    { title: "Modeling multi-particle complexes in stochastic chemical systems", authors: "MJ Morrison, JB Kinney", venue: "arXiv preprint arXiv:1603.07369, 2016", year: "2016", paper: "", preprint: "", code: "" },
-    { title: "Methods of identifying essential protein domains", authors: "CH Vakoc, J Shi, JB Kinney", venue: "", year: "2016", paper: "", preprint: "", code: "" },
-    { title: "Discovery of cancer drug targets by CRISPR-Cas9 screening of protein domains", authors: "J Shi, E Wang, JP Milazzo, Z Wang, JB Kinney, CR Vakoc", venue: "Nature Biotechnology 33, 661-667, 2015", year: "2015", paper: "", preprint: "", code: "" },
-    { title: "The transcriptional cofactor TRIM33 prevents apoptosis in B lymphoblastic leukemia by deactivating a single enhancer", authors: "E Wang, S Kawaoka, JS Roe, J Shi, AF Hohmann, Y Xu, AS Bhagwat, ...", venue: "elife 4, e06377, 2015", year: "2015", paper: "", preprint: "", code: "" },
-    { title: "Learning quantitative sequence–function relationships from massively parallel experiments", authors: "GS Atwal, JB Kinney", venue: "Journal of Statistical Physics, 1-41, 2015", year: "2015", paper: "", preprint: "", code: "" },
-    { title: "Unification of field theory and maximum entropy methods for learning probability densities", authors: "JB Kinney", venue: "Physical Review E 92, 032107, 2015", year: "2015", paper: "", preprint: "", code: "" },
-    { title: "Equitability, mutual information, and the maximal information coefficient", authors: "JB Kinney, GS Atwal", venue: "Proceedings of the National Academy of Sciences USA 111 (9), 3354-3359, 2014", year: "2014", paper: "", preprint: "", code: "" },
-    { title: "Domain within the helicase subunit Mcm4 integrates multiple kinase signals to control DNA replication initiation and fork progression", authors: "YJ Sheu, JB Kinney, A Lengronne, P Pasero, B Stillman", venue: "Proceedings of the National Academy of Sciences USA 111 (18), E1899-E1908, 2014", year: "2014", paper: "", preprint: "", code: "" },
-    { title: "Comparison of the theoretical and real-world evolutionary potential of a genetic circuit", authors: "M Razo-Mejia, JQ Boedicker, D Jones, A DeLuna, JB Kinney, R Phillips", venue: "Physical Biology 11 (2), 026005, 2014", year: "2014", paper: "", preprint: "", code: "" },
-    { title: "Parametric inference in the large data limit using maximally informative models", authors: "JB Kinney, GS Atwal", venue: "Neural Computation 26 (4), 637-665, 2014", year: "2014", paper: "", preprint: "", code: "" },
-    { title: "Estimation of probability densities using scale-free field theories", authors: "JB Kinney", venue: "Physical Review E 90, 011301(R), 2014", year: "2014", paper: "", preprint: "", code: "" },
-    { title: "Reply to Reshef et al.: Falsifiability or bust", authors: "JB Kinney, GS Atwal", venue: "Proceedings of the National Academy of Sciences USA 111 (33), E3364-E3364, 2014", year: "2014", paper: "", preprint: "", code: "" },
-    { title: "Reply to Murrell et al.: Noise matters", authors: "JB Kinney, GS Atwal", venue: "Proceedings of the National Academy of Sciences USA 111 (21), E2161-E2161, 2014", year: "2014", paper: "", preprint: "", code: "" },
-    { title: "Mutual information: a universal measure of statistical dependence.", authors: "JB Kinney", venue: "Biomedical Computation Review 10 (2), 33, 2014", year: "2014", paper: "", preprint: "", code: "" },
-    { title: "Evaluation of methods for modeling transcription factor sequence specificity", authors: "MT Weirauch, A Cote, R Norel, M Annala, Y Zhao, TR Riley, ...", venue: "Nature biotechnology 31 (2), 126-134, 2013", year: "2013", paper: "", preprint: "", code: "" },
-    { title: "Systematic dissection and optimization of inducible enhancers in human cells using a massively parallel reporter assay", authors: "A Melnikov, A Murugan, X Zhang, T Tesileanu, L Wang, P Rogov, S Feizi, ...", venue: "Nature Biotechnology 30 (3), 271-277, 2012", year: "2012", paper: "", preprint: "", code: "" },
-    { title: "Using deep sequencing to characterize the biophysical mechanism of a transcriptional regulatory sequence", authors: "JB Kinney, A Murugan, CG Callan, EC Cox", venue: "Proceedings of the National Academy of Sciences USA 107 (20), 9158-9163, 2010", year: "2010", paper: "", preprint: "", code: "" },
-    { title: "Energy-dependent fitness: a quantitative model for the evolution of yeast transcription factor binding sites", authors: "V Mustonen, J Kinney, CG Callan, M Lässig", venue: "Proceedings of the National Academy of Sciences USA 105 (34), 12376-12381, 2008", year: "2008", paper: "", preprint: "", code: "" },
-    { title: "Biophysical models of transcriptional regulation from sequence data", authors: "JB Kinney", venue: "Princeton University, 2008", year: "2008", paper: "", preprint: "", code: "" },
-    { title: "Precise physical models of protein–DNA interaction from high-throughput data", authors: "JB Kinney, G Tkačik, CG Callan", venue: "Proceedings of the National Academy of Sciences USA 104 (2), 501-506, 2007", year: "2007", paper: "", preprint: "", code: "" }
-];
 
 // Format authors to highlight Kinney
 function formatAuthors(authorsStr) {
@@ -595,63 +397,22 @@ function renderPublications(publications) {
 async function loadPublications() {
     const container = document.getElementById('publications-container');
     if (!container) return;
-    
-    console.log('Loading publications...');
-    
-    // Try to fetch from CSV first (works on deployed site)
     try {
         const response = await fetch('/backend/scholar_publications.csv');
-        console.log('Publications fetch response:', response.status);
-        
-        if (!response.ok) {
-            throw new Error('Failed to load CSV');
-        }
-        
+        if (!response.ok) throw new Error('Failed to load CSV');
         const csvText = await response.text();
         const publications = parseCSV(csvText);
-        console.log('Parsed publications:', publications.length, 'items');
-        console.log('First publication:', publications[0]);
-        
         if (publications.length > 0) {
             renderPublications(publications);
             return;
         }
     } catch (error) {
-        // Fetch failed (likely local file:// access), use fallback
-        console.log('Publications error:', error.message);
-        console.log('Using embedded publications data');
+        // Fetch failed (e.g. local file://), use fallback
     }
-    
-    // Fall back to embedded data
     renderPublications(fallbackPublicationsData);
 }
 
 // ===== ALUMNI SECTION DYNAMIC LOADING =====
-
-// Parse alumni CSV data (uses same logic as parseCSV)
-function parseAlumniCSV(csvText) {
-    // Handle Windows line endings and trim
-    const lines = csvText.replace(/\r/g, '').trim().split('\n');
-    if (lines.length === 0) return [];
-    
-    const headers = parseCSVLine(lines[0]).map(h => h.trim());
-    const data = [];
-    
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (!line) continue; // Skip empty lines
-        
-        const values = parseCSVLine(line);
-        const row = {};
-        headers.forEach((header, index) => {
-            row[header] = values[index] ? values[index].trim() : '';
-        });
-        data.push(row);
-    }
-    
-    console.log('Parsed alumni data:', data);
-    return data;
-}
 
 // Create HTML for an alumni table
 function createAlumniTableHTML(sectionName, alumni) {
@@ -715,28 +476,17 @@ async function loadAlumni() {
     const container = document.getElementById('alumni-container');
     if (!container) return;
     
-    console.log('Loading alumni...');
-    
     try {
         const response = await fetch('/backend/alumni.csv');
-        console.log('Fetch response:', response.status);
-        
-        if (!response.ok) {
-            throw new Error('Failed to load alumni.csv');
-        }
-        
+        if (!response.ok) throw new Error('Failed to load alumni.csv');
         const csvText = await response.text();
-        console.log('CSV text:', csvText);
-        
-        const alumni = parseAlumniCSV(csvText);
-        
+        const alumni = parseCSV(csvText);
         if (alumni.length > 0) {
             renderAlumni(alumni);
         } else {
             container.innerHTML = '<p class="error-message">No alumni data found.</p>';
         }
     } catch (error) {
-        console.log('Could not load alumni:', error.message);
         container.innerHTML = '<p class="error-message">Unable to load alumni data.</p>';
     }
 }
@@ -837,7 +587,6 @@ async function loadPerson() {
             }
         }
     } catch (error) {
-        console.log('Could not load person from CSV:', error.message);
         // Try fallback data
         const fallbackPerson = fallbackTeamData.find(p => p['Name'] === personName);
         if (fallbackPerson) {
