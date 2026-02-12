@@ -165,9 +165,9 @@ function createTeamMemberHTML(member) {
 
 // Render team members from data array (single grid, no section headers)
 function renderTeamMembers(people) {
-    const container = document.getElementById('team-container');
+    const container = document.getElementById('team-members-container');
     if (!container) return;
-    const membersHTML = people.map(m => createTeamMemberHTML(m, false)).join('');
+    const membersHTML = people.map(m => createTeamMemberHTML(m)).join('');
     container.innerHTML = '<div class="team-grid members-grid">' + membersHTML + '</div>';
 }
 
