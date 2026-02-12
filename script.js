@@ -388,33 +388,47 @@ function renderSelectedPublications(rows) {
     });
 }
 
+// Normalize selected-publications rows so keys are trimmed (e.g. "\tAuthors" -> "Authors")
+function normalizeSelectedPubRows(rows) {
+    return rows.map(row => {
+        const out = {};
+        for (const [key, value] of Object.entries(row)) {
+            const k = (key || '').trim();
+            out[k] = value != null ? String(value).trim() : '';
+        }
+        return out;
+    });
+}
+
 async function loadSelectedPublications() {
     const container = document.getElementById('selected-publications-container');
     if (!container) return;
-    
+    // Use path relative to current page so it works on /research/ and when opened as file
+    const backendBase = new URL('../backend/', document.location.href).href;
+    const xlsxUrl = new URL('selected_publications.xlsx', backendBase).href;
+    const csvUrl = new URL('selected_publications.csv', backendBase).href;
+
     async function tryXlsx() {
         if (typeof XLSX === 'undefined') return null;
-        const response = await fetch('/backend/selected_publications.xlsx');
-        if (!response.ok) return null;
-        const arrayBuffer = await response.arrayBuffer();
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const rawRows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
-        return rawRows.map(row => {
-            const normalized = {};
-            for (const [key, value] of Object.entries(row)) {
-                const k = (key || '').trim();
-                normalized[k] = value != null ? String(value).trim() : '';
-            }
-            return normalized;
-        });
+        try {
+            const response = await fetch(xlsxUrl);
+            if (!response.ok) return null;
+            const arrayBuffer = await response.arrayBuffer();
+            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const rawRows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+            return normalizeSelectedPubRows(rawRows);
+        } catch (e) {
+            return null;
+        }
     }
     async function tryCsv() {
-        const response = await fetch('/backend/selected_publications.csv');
+        const response = await fetch(csvUrl);
         if (!response.ok) throw new Error('Failed to load selected publications');
         const text = await response.text();
-        return parseTSV(text);
+        const rows = parseCSV(text);
+        return normalizeSelectedPubRows(rows);
     }
     try {
         let rows = await tryXlsx();
