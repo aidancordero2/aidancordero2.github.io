@@ -1,8 +1,8 @@
-Name,Section,Position,Photo,GitHub,GoogleScholar,Bio
-Justin Kinney,Principal Investigator,Professor and Chair of Simons Center for Quantitative Biology,pictures/justin_picture.png,https://github.com/jbkinney,https://scholar.google.com/citations?user=lAS1T9BopYMC&hl=en,
-John Desmarais,Postdoctoral Researchers,Postdoc,pictures/jack_picture.jpg,,,
-Zhihan Liu,Postdoctoral Researchers,Postdoc,pictures/leo_picture.jpg,https://github.com/Zhihan-Leo-Liu,,
-Kaiser Loell,Postdoctoral Researchers,Postdoc,pictures/kaiser_picture.png,,,
-Deborah Tenenbaum,Postdoctoral Researchers,Postdoc,pictures/deborah_picture.jpg,,,
-Andalus Ayaz,Staff,Research Technician,pictures/andalus_picture.png,,,
-Aidan Cordero,Staff,Computational Science Developer,pictures/aidan_picture.png,https://github.com/aidancordero2,https://scholar.google.com/citations?hl=en&user=No7MvSYAAAAJ,Aidan is a Computational Science Developer in the Kinney Lab.
+Name,Section,Position,Photo,Email,GitHub,GoogleScholar,Bio
+Justin Kinney,Principal Investigator,Professor and Chair of Simons Center for Quantitative Biology,pictures/justin_picture.png,jbkinney@cshl.edu,https://github.com/jbkinney,https://scholar.google.com/citations?user=lAS1T9BopYMC&hl=en,"Dr. Kinney completed his Ph.D. in Physics at Princeton University in 2008 and began his term as a Quantitative Biology Fellow at CSHL in 2010. His research focuses on developing next-generation DNA sequencing as a tool for dissecting the biophysical mechanisms of gene regulation. As a graduate student, Kinney co-invented a widely used technique now known as the massively parallel reporter assay (MPRA). Kinney and colleagues further showed how, using ideas from information theory, such experiments could be used to infer quantitative biophysical models for how cells regulate gene expression. The Kinney lab continues to leverage a tightly knit combination of mathematical theory, machine learning, and experiments in order to illuminate the biophysics of gene regulation in two diverse contexts: bacterial transcriptional regulation and alternative mRNA splicing in humans. This latter context is highly relevant to understanding and treating human diseases like Spinal Muscular Atrophy and Cancer. The Kinney lab also develops algorithms and software for the analysis of MPRAs and other multiplex assays of variant effect (MAVEs)."
+John Desmarais,Postdoctoral Researchers,Postdoc,pictures/jack_picture.jpg,desmara@cshl.edu,,,
+Zhihan Liu,Postdoctoral Researchers,Postdoc,pictures/leo_picture.jpg,zhliu@cshl.edu,https://github.com/Zhihan-Leo-Liu,,
+Kaiser Loell,Postdoctoral Researchers,Postdoc,pictures/kaiser_picture.png,loell@cshl.edu,,,
+Deborah Tenenbaum,Postdoctoral Researchers,Postdoc,pictures/deborah_picture.jpg,tebenba@cshl.edu,,,
+Andalus Ayaz,Staff,Research Technician,pictures/andalus_picture.png,aayaz@cshl.edu,,,
+Aidan Cordero,Staff,Computational Science Developer,pictures/aidan_picture.png,aicorder@cshl.edu,https://github.com/aidancordero2,https://scholar.google.com/citations?hl=en&user=No7MvSYAAAAJ,Aidan is a Computational Science Developer in the Kinney Lab.

@@ -141,6 +141,7 @@ function createTeamMemberHTML(member) {
     const name = member['Name'] || '';
     const position = member['Position'] || '';
     const photo = normalizePath(member['Photo'] || '');
+    const email = (member['Email'] || '').trim();
     
     // Create photo HTML
     let photoHTML;
@@ -154,11 +155,16 @@ function createTeamMemberHTML(member) {
     const personUrl = `/person/?name=${encodeURIComponent(name)}`;
     const photoSection = `<a href="${personUrl}" class="member-photo-link"><div class="member-photo">${photoHTML}</div></a>`;
     
+    const emailHTML = email
+        ? `<p class="member-email"><a href="mailto:${email}">${email}</a></p>`
+        : '';
+    
     return `
         <div class="team-member">
             ${photoSection}
             <h3 class="member-name">${name}</h3>
             <p class="member-role">${position}</p>
+            ${emailHTML}
         </div>
     `;
 }
@@ -498,6 +504,7 @@ function createPersonHTML(person) {
     const name = person['Name'] || '';
     const position = person['Position'] || '';
     const photo = normalizePath(person['Photo'] || '');
+    const email = (person['Email'] || '').trim();
     const github = person['GitHub'] || '';
     const scholar = person['GoogleScholar'] || '';
     const bio = person['Bio'] || '';
@@ -535,11 +542,13 @@ function createPersonHTML(person) {
         bioHTML = `<div class="person-bio">${bio}</div>`;
     }
     
+    const emailHTML = email ? `<p class="person-email"><a href="mailto:${email}">${email}</a></p>` : '';
     return `
         <div class="person-profile">
             <div class="person-photo">${photoHTML}</div>
             <h1 class="person-name">${name}</h1>
             <p class="person-position">${position}</p>
+            ${emailHTML}
             ${linksHTML}
             ${bioHTML}
         </div>

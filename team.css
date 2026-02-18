@@ -98,7 +98,22 @@
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+.member-email {
+    font-size: 0.85rem;
     margin-bottom: 0.75rem;
+}
+
+.member-email a {
+    color: #555555;
+    text-decoration: none;
+}
+
+.member-email a:hover {
+    color: #3498db;
+    text-decoration: underline;
 }
 
 .member-links {
